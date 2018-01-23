@@ -73,13 +73,14 @@
          $.ajax({
              type: 'POST',
              url: '/users/delete',
-             data: userToDelete,
+             data: JSON.stringify(userToDelete),
              processType: false,
-             contentType: false,
+             contentType: 'application/json',
              complete: function(ret) {
-                 alert(ret.responceText)
+                 alert(ret.responseText)
                  console.log(ret)
              }
+         })
      }
 
      $(document).ready(function() {

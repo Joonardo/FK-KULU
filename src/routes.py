@@ -120,7 +120,8 @@ def add_user():
 @app.route('/users/delete', methods=['POST'])
 @admin_required
 def delete_user():
-    username = request.data['username']
+    username = str(request.json)
+    print(username)
     DB.db.session.delete(DB.Users.query.filter_by(username=username).first())
     DB.db.session.commit()
     return 'Käyttäjä ' + username + ' poistettu.', 200

@@ -112,18 +112,13 @@ def add_user():
     tmp_pass = request.form['password']
     #tmp_pass = "".join(random.choice(string.ascii_letters) for _ in range(10))
     tmp_pass_hash = pwd_context.hash(tmp_pass)
-    new_user = DB.Users(username=request.form['username'], email=request.form['email'], password_hash=tmp_pass_hash, admin=('on'==request.form['admin']))
-    DB.db.session.add(new_user)
-    DB.db.session.commit()
+    DB.User.add(request.form['username'], request.form['email'], tmp_pass_hash, 'on'==request.form.get('admin', 'off'))
     return 'Uusi käyttäjä lisätty.', 200
 
 @app.route('/users/delete', methods=['POST'])
 @admin_required
 def delete_user():
-    username = str(request.json)
-    print(username)
-    DB.db.session.delete(DB.Users.query.filter_by(username=username).first())
-    DB.db.session.commit()
+    DB.User.delete(str(request.json))
     return 'Käyttäjä ' + username + ' poistettu.', 200
 
 @app.route('/bills/<filename>', methods=['GET'])

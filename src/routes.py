@@ -101,6 +101,11 @@ def receive():
 def view():
     return render_template('view.html', bills=DB.Bill.all())
 
+@app.route('/bills/<bid>/accept', methods=['POST'])
+def accept(bid):
+    DB.Bill.accept(bid)
+    return "", 200
+
 @app.route('/users', methods=['GET'])
 @admin_required
 def users():
@@ -124,5 +129,4 @@ def delete_user():
 @app.route('/bills/<filename>', methods=['GET'])
 @auth_required
 def download(filename):
-    print(os.getcwd())
     return send_from_directory(os.getcwd() + '/bills', filename, as_attachment=True, attachment_filename=DB.Bill.pretty_name(filename))

@@ -9,8 +9,9 @@ class Bill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     submitter = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(20), nullable=False)
-    done = db.Column(db.Boolean, default=False, nullable=False)
     filename = db.Column(db.String(50), nullable=False, unique=True)
+    accepted = db.Column(db.Boolean, default=False, nullable=False)
+    done = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(self, submitter, filename):
         self.submitter = submitter
@@ -22,6 +23,13 @@ class Bill(db.Model):
     @staticmethod
     def all():
         return Bill.query.all()
+
+    @staticmethod
+    def accept(bid):
+        bill = Bill.query.get(bid)
+        bill.accepted = True
+        db.session.add(bill)
+        db.session.commit()
 
     @staticmethod
     def pretty_name(fn):

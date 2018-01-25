@@ -19,8 +19,8 @@
             <tr>
                 <th>{{ bill.submitter }}</th>
                 <th>{{ bill.date }}</th>
-                <th>
-                    {% if bill.done %}
+                <th id="acc-{{ bill.id }}">
+                    {% if bill.accepted %}
                     <span style="font-size: 0.8cm;" class="fa fa-check-square-o"></span>
                     {% endif %}
                 </th>
@@ -28,11 +28,37 @@
                     <a href="bills/{{ bill.filename }}" class="btn btn-primary" role="button">
                         Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
                     </a>
+                    <button id="btn-{{ bill.id }}" class="btn btn-success" role="button">
+                        <span class="fa fa-check-square-o"></span>
+                    </a>
                 </th>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('*[id^="btn-"]').each(function() {
+            id = $(this)[0].id.split('-')[1]
+            $(this).click(function() {
+                $.ajax({
+                    type: 'post',
+                    url: '/bills/' + id + '/accept',
+                    complete: function(ret) {
+                        if(ret.status != 200) {
+                            alert("Oho, jotain meni pieleen.")
+                            return
+                        }
+                        $("#acc-" + id).html(
+                            '<span style="font-size: 0.8cm;" class="fa fa-check-square-o"></span>'
+                        )
+                    }
+                })
+            })
+        })
+    })
+</script>
 {% endif %}
 {% endblock %}

@@ -1,6 +1,7 @@
 from DB import db
 from hashlib import sha512
 from binascii import a2b_base64
+from App import app
 
 class Receipt(db.Model):
     __tablename__ = 'receipts'

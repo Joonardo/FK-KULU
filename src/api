@@ -1,0 +1,16 @@
+BILL: {
+	nimi: String,
+	iban: String,
+	peruste: String,
+	liitteet: [LIITE]
+}
+
+LIITE: {
+	summa: Double,
+	kuvaus: String,
+	filename: String	# filename is sha512-sum of content
+}
+
+USER: {
+	???
+}

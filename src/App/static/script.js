@@ -86,27 +86,28 @@ function AddTositeField() {
 }
 
 function submit() {
-    var files = readFiles()
+    Promise.all(readFiles()).then(function(liitteet) {
 
-    var data = {
-        nimi: $('#nimi')[0].value,
-        iban: $('#iban')[0].value,
-        peruste: $('#peruste')[0].value,
-        liitteet: files
-    }
-
-    console.log(data);
-    console.log(JSON.stringify(data));
-
-    $.ajax({
-        type: 'post',
-        url: '/',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        complete: function(ret) {
-            alert(ret.responseText); //TODO
-            console.log(ret);
+        var data = {
+            nimi: $('#nimi')[0].value,
+            iban: $('#iban')[0].value,
+            peruste: $('#peruste')[0].value,
+            liitteet: liitteet
         }
+
+        console.log(data);
+        console.log(JSON.stringify(data));
+
+        $.ajax({
+            type: 'post',
+            url: '/',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            complete: function(ret) {
+                alert(ret.responseText); //TODO
+                console.log(ret);
+            }
+        })
     })
 }
 

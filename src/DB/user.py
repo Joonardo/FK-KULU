@@ -1,6 +1,7 @@
 from DB import db
 
-class Users(db.Model):
+class User(db.Model):
+    __tablename__ = 'users'
     username      = db.Column(db.String(100), primary_key=True)
     email         = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)

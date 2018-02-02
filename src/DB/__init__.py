@@ -6,4 +6,4 @@ db = SQLAlchemy(app)
 
 from .user import User
 from .bill import Bill
-import .api
+from .api import *

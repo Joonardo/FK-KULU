@@ -6,8 +6,8 @@ import string
 from functools import wraps
 
 from security import pwd_context
-from render import latexify
-from app import app
+from App.render import latexify
+from App import app
 import DB
 
 def is_admin(username):

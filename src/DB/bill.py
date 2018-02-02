@@ -1,6 +1,8 @@
 from DB import db
+from datetime import date
 
 class Bill(db.Model):
+    __tablename__ = 'bills'
     id = db.Column(db.Integer, primary_key=True)
     submitter = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(20), nullable=False)

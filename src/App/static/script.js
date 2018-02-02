@@ -100,6 +100,8 @@ function submit() {
     $('.tosite').each(function() { ids.push($(this)[0].id) })
     formData.append('ids', ids)
 
+    console.log($('#form').serializeArray())
+
     $.ajax({
         type: 'post',
         url: '/',

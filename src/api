@@ -1,5 +1,5 @@
 BILL: {
-	nimi: String,
+	submitter: String,
 	iban: String,
 	peruste: String,
 	liitteet: [LIITE]

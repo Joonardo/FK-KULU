@@ -1,32 +1,30 @@
 from DB import db
-from datetime import date
+from .receipt import Receipt
+from datetime import datetime
 
 class Bill(db.Model):
     __tablename__ = 'bills'
     id = db.Column(db.Integer, primary_key=True)
-    submitter = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(20), nullable=False)
-    filename = db.Column(db.String(50), nullable=False, unique=True)
-    accepted = db.Column(db.Boolean, default=False, nullable=False)
-    done = db.Column(db.Boolean, default=False, nullable=False)
+    submitter = db.Column(db.String(40), nullable=False)
+    iban = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+    receipts = db.relationship('Receipt', backref='bill', lazy=True)
 
-    def __init__(self, submitter, filename):
+    def __init__(self, submitter, iban, description, receipts):
         self.submitter = submitter
-        self.filename = filename
-        self.date = str(date.today())
+        self.date = datetime.now()
+        self.iban = iban
+        self.description = description
+        self.receipts = receipts
+
         db.session.add(self)
         db.session.commit()
 
+    # Preprocessor for posting new bill
     @staticmethod
-    def all():
-        return Bill.query.all()
-
-    @staticmethod
-    def accept(bid):
-        bill = Bill.query.get(bid)
-        bill.accepted = True
-        db.session.add(bill)
-        db.session.commit()
+    def pre_post(**kw):
+        kw['data']['receipts'] = [Receipt(**r) for r in kw['data']['receipts']]
 
     @staticmethod
     def pretty_name(fn):

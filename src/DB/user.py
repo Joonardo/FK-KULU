@@ -21,5 +21,5 @@ class User(db.Model):
 
     @staticmethod
     def delete(username):
-        db.session.delete(DB.Users.query.filter_by(username=username).first())
+        db.session.delete(User.query.filter_by(username=username).first())
         db.session.commit()

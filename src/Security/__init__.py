@@ -26,3 +26,7 @@ def get_auth_token(**kw):
         return ser.dump({'username': user.username})
 
     raise ProcessingException(description='Wrong password or username.')
+
+def requires_admin():
+    if not g.user.admin:
+        raise ProcessingException(description='Only admin can do this.')

@@ -16,11 +16,10 @@ class Receipt(db.Model):
         self.description = description
         self.amount = amount
 
-        header, data = a2b_base64(content).split(',')
+        header, data = content.split(',')
+        data = a2b_base64(data)
         type = header.split('/')[1].split(';')[0]
-        self.filename = sha512(data).hexdigest() + '.' + type
+        self.filename = sha512(data).hexdigest()
 
         with open(app.config['RECEIPTS_FOLDER'] + self.filename, 'wb') as f:
             f.write(data)
-
-        db.session.add(self)

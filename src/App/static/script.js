@@ -57,7 +57,7 @@ function AddTositeField() {
         var parts = $(this)[0].value.split("\\")
         var fn = parts[parts.length-1]
         elem.find("#liitePh").text(fn)
-        setValidation($(this), $(this)[0].files[0].type === 'application/pdf')
+        setValidation($(this), true)//$(this)[0].files[0].type === 'application/pdf')
     })
 
     elem.find("#summa").on('input', function() {

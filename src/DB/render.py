@@ -23,7 +23,7 @@ latex_jinja2_env = jinja2.Environment(
 )
 
 def escape(s):
-    map = {
+    escaped_chars = {
         '$':  "\\$",
         '%':  "\\%",
         '&':  "\\&",
@@ -44,42 +44,33 @@ def escape(s):
     }
     res = ""
     for c in s:
-        res += map.get(c, c)
+        res += escaped_chars.get(c, c)
     return res
 
 
-def latexify(nimi, iban, peruste, tositteet):
-    base = str(uuid4())
-    folder = 'tmp/' + base + '/'
-    os.mkdir(folder)
+def latexify(bill):
+    id = str(uuid4())
 
-    for tosite in tositteet:
-        fn = folder + secure_filename(tosite['liite'].filename)
-        tosite['liite'].save(fn)
-        tosite['liite'] = fn
-
-    tositteet = [dict([(k, escape(v)) for (k,v) in t.items()]) for t in tositteet]
+    tositteet = [{'summa': escape(t.amount), 'liite': t.filename, 'kuvaus': escape(t.description)} for t in bill.tositteet]
 
     template = latex_jinja2_env.get_template('template.tex')
     formatted = template.render(
-        nimi=escape(nimi),
-        iban=escape(iban),
-        peruste=escape(peruste),
+        nimi=escape(bill.submitter),
+        iban=escape(bill.iban),
+        peruste=escape(bill.description),
         tositteet=tositteet,
         yhteensa=sum(int(tosite['summa']) for tosite in tositteet)
     )
 
-    texf = folder + base + '.tex'
+    texf = id + '.tex'
     with open(texf, 'w') as f:
         f.write(formatted)
 
     # Kutsutaan kahdesti, jotta saadaan kuvat ja refit oikein
     dev = open(os.devnull, 'w')
-    ret = call(['pdflatex', '-halt-on-error','-output-directory', folder, texf], stdout=dev, stderr=STDOUT)
-    ret |= call(['pdflatex', '-halt-on-error', '-output-directory', folder, texf], stdout=dev, stderr=STDOUT)
+    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
+    ret |= call(['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
 
-    if not ret:
-        shutil.copy(folder + base + '.pdf', 'bills/')
-    shutil.rmtree(folder)
+    os.unlink(texf)
 
-    return base + '.pdf' if not ret else None
+    return id + '.pdf' if not ret else None

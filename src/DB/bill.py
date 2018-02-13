@@ -11,12 +11,16 @@ class Bill(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     receipts = db.relationship('Receipt', backref='bill', lazy=True)
 
-    def __init__(self, submitter, iban, description, receipts):
+    def __init__(self, submitter, iban, description, receipts=[]):
         self.submitter = submitter
         self.date = datetime.now()
         self.iban = iban
         self.description = description
         self.receipts = receipts
+
+        for r in receipts:
+            r.bill = self
+            db.session.add(r)
 
         db.session.add(self)
         db.session.commit()
@@ -25,6 +29,14 @@ class Bill(db.Model):
     @staticmethod
     def pre_post(**kw):
         kw['data']['receipts'] = [Receipt(**r) for r in kw['data']['receipts']]
+
+    @staticmethod
+    def render(id):
+        fn = latexify(Bill.query.get(id))
+        if not fn:
+            return "Oops...", 404
+
+        return send_from_directory(app.config['TMP_FOLDER'], fn, as_attachment=True)
 
     @staticmethod
     def pretty_name(fn):

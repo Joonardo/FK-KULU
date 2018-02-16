@@ -70,10 +70,5 @@ def login_view():
 
 
 @app.route('/bills', methods=['GET'])
-def login_view():
-    try:
-        sec.auth()
-    except ProcessingException:
-        return "Lörs"
-
-    return render_template('login.html')
+def bills_view():
+    return render_template('view.html')

@@ -1,5 +1,5 @@
-from flask_restless import APIManager
-from flaks import jsonify
+from flask_restless import APIManager, ProcessingException
+from flask import jsonify, request, make_response
 
 from DB import Bill, Receipt, User, db
 from App import app
@@ -27,4 +27,16 @@ manager.create_api(Bill,
 
 @app.route('/api/bills/<id>/pdf', methods=['GET'])
 def download(id):
-    pass
+    try:
+        sec.auth()
+    except ProcessingException:
+        return 'Oops, you are not allowed to do that.', 400
+    # TODO render the pdf or implement this in GET
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    if not data:
+        return '', 400
+    message, token = sec.get_auth_token(data['username'], data['password'])
+    return jsonify({'message': message, 'token': token})

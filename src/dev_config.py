@@ -1,4 +1,4 @@
-SECRET = "very_secret_key"
+SECRET = "very secret key"
 DEBUG = True
 
 EMAIL = "\0"

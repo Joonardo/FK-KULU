@@ -1,5 +1,5 @@
 from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature, SignatureExpired
-from flask import g
+from flask import g, request
 from flask_restless import ProcessingException
 
 from Security.password import verify
@@ -10,7 +10,7 @@ ser = TimedJSONWebSignatureSerializer(app.config['SECRET_KEY'], expires_in=3600)
 
 def auth(**kw):
     try:
-        data = ser.loads(kw['data']['token'])
+        data = ser.loads(kw['data']['token'].decode('ascii'))
     except BadSignature:
         raise ProcessingException(description='Oops, something went wrong with your token...')
     except SignatureExpired:
@@ -19,13 +19,17 @@ def auth(**kw):
     del kw['data']['token'] # Is this necessary?
     g.user = User.query.filter_by(username=data['username'])
 
-def get_auth_token(**kw):
-    user = User.query.filter_by(username=kw['data']['username']).one()
+def get_auth_token(username, password):
+    user = User.query.filter_by(username=username).first()
 
-    if verify(kw['data']['password'], user.password_hash):
-        return ser.dump({'username': user.username})
+    if not user:
+        return ['User not found.', '']
 
-    raise ProcessingException(description='Wrong password or username.')
+    if verify(password, user.password_hash):
+        print(user.username)
+        return ['Success', ser.dumps({'username': user.username})]
+
+    return ['Wrong password or username.', '']
 
 def requires_admin():
     if not g.user.admin:

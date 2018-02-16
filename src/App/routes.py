@@ -5,7 +5,7 @@ import random
 import string
 from functools import wraps
 
-from App.render import latexify
+#from App.render import latexify
 from App import app
 import DB
 

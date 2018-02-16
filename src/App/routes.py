@@ -63,3 +63,17 @@ def receive():
     DB.Bill(bill['nimi'], retf)
 
     return 'Lähettäminen onnistui.', 200
+
+@app.route('/login', methods=['GET'])
+def login_view():
+    return render_template('login.html')
+
+
+@app.route('/bills', methods=['GET'])
+def login_view():
+    try:
+        sec.auth()
+    except ProcessingException:
+        return "Lörs"
+
+    return render_template('login.html')

@@ -1,6 +1,7 @@
 from DB import db
 from .receipt import Receipt
 from datetime import datetime
+from .render import latexify
 
 class Bill(db.Model):
     __tablename__ = 'bills'

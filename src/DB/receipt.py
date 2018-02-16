@@ -19,7 +19,7 @@ class Receipt(db.Model):
         header, data = content.split(',')
         data = a2b_base64(data)
         type = header.split('/')[1].split(';')[0]
-        self.filename = sha512(data).hexdigest()
+        self.filename = sha512(data).hexdigest() + '.pdf'
 
         with open(app.config['RECEIPTS_FOLDER'] + self.filename, 'wb') as f:
             f.write(data)

@@ -6,6 +6,7 @@ import jinja2
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 from subprocess import call, STDOUT
+from App import app
 
 
 latex_jinja2_env = jinja2.Environment(
@@ -19,7 +20,7 @@ latex_jinja2_env = jinja2.Environment(
 	line_comment_prefix = '%#',
 	trim_blocks = True,
 	autoescape = False,
-	loader = jinja2.FileSystemLoader(os.path.abspath('./src/templates'))
+	loader = jinja2.FileSystemLoader(os.path.abspath('./App/templates'))
 )
 
 def escape(s):
@@ -51,7 +52,7 @@ def escape(s):
 def latexify(bill):
     id = str(uuid4())
 
-    tositteet = [{'summa': escape(t.amount), 'liite': t.filename, 'kuvaus': escape(t.description)} for t in bill.tositteet]
+    tositteet = [{'summa': escape(str(t.amount)), 'liite': app.config['RECEIPTS_FOLDER'] + t.filename, 'kuvaus': escape(t.description)} for t in bill.receipts]
 
     template = latex_jinja2_env.get_template('template.tex')
     formatted = template.render(
@@ -59,7 +60,7 @@ def latexify(bill):
         iban=escape(bill.iban),
         peruste=escape(bill.description),
         tositteet=tositteet,
-        yhteensa=sum(int(tosite['summa']) for tosite in tositteet)
+        yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
     )
 
     texf = id + '.tex'
@@ -68,7 +69,7 @@ def latexify(bill):
 
     # Kutsutaan kahdesti, jotta saadaan kuvat ja refit oikein
     dev = open(os.devnull, 'w')
-    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
+    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf])#, stdout=dev, stderr=STDOUT)
     ret |= call(['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
 
     os.unlink(texf)

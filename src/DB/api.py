@@ -31,7 +31,7 @@ def download(id):
         sec.auth()
     except ProcessingException:
         return 'Oops, you are not allowed to do that.', 400
-    # TODO render the pdf or implement this in GET
+    return Bill.render(id)
 
 @app.route('/api/login', methods=['POST'])
 def login():

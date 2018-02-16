@@ -3,6 +3,9 @@ from .receipt import Receipt
 from datetime import datetime
 from .render import latexify
 
+from flask_restless import ProcessingException
+from schwifty import IBAN
+
 class Bill(db.Model):
     __tablename__ = 'bills'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +16,27 @@ class Bill(db.Model):
     receipts = db.relationship('Receipt', backref='bill', lazy=True)
 
     def __init__(self, submitter, iban, description, receipts=[]):
+
+        errors = []
+
+        if len(request.form.get('nimi', '\0')) == 0:
+            errors.append('Nimi on pakollinen kenttä.')
+
+        try:
+            IBAN(request.form.get('iban', '\0'))
+        except ValueError:
+            errors.append('IBAN ei ole validi.')
+
+        if len(request.form.get('peruste', '\0')) == 0:
+            errors.append('Maksun peruste tulee antaa.')
+
+        if len(request.form.get('ids', '\0')) == 0:
+            errors.append('Tositteita ei löytynyt.')
+
+        if len(errors) > 0:
+            raise ProcessingException(description='\n'.join(errors))
+
+
         self.submitter = submitter
         self.date = datetime.now()
         self.iban = iban

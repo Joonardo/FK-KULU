@@ -3,6 +3,7 @@ from .user import User
 from hashlib import sha512
 from binascii import a2b_base64
 from App import app
+from flask_restless import ProcessingException
 
 class Receipt(db.Model):
     __tablename__ = 'receipts'
@@ -13,6 +14,10 @@ class Receipt(db.Model):
     bill_id = db.Column(db.Integer, db.ForeignKey('bills.id'), nullable=False)
 
     def __init__(self, description, amount, content):
+
+        if (not description) or (not amount) or (not content):
+            raise ProcessingException(description='Tositteista puuttuu tietoja.')
+
         self.description = description
         self.amount = amount
 

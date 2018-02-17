@@ -13,7 +13,7 @@ manager.create_api(User,
                        'GET': [sec.auth],
                        'GET_MANY': [sec.auth],
                        'POST': [sec.auth, sec.requires_admin, User.preprocess],
-                       'DELETE': [sec.auth, sec.requires_admin]
+                       'DELETE_SINGLE': [sec.auth, sec.requires_admin]
                    },
                    exclude_columns=['password_hash']
                    )

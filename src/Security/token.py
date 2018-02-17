@@ -33,5 +33,6 @@ def get_auth_token(username, password):
     return ['Wrong password or username.', '']
 
 def requires_admin(**kw):
+    print(kw)
     if not g.user.admin:
         raise ProcessingException(description='Only admin can do this.')

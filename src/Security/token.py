@@ -18,7 +18,7 @@ def auth(**kw):
     except SignatureExpired:
         raise ProcessingException(description='Your token has expired.', code=400)
 
-    g.user = User.query.filter_by(username=data['username'])
+    g.user = User.query.filter_by(username=data['username']).first()
 
 def get_auth_token(username, password):
     user = User.query.filter_by(username=username).first()
@@ -32,6 +32,6 @@ def get_auth_token(username, password):
 
     return ['Wrong password or username.', '']
 
-def requires_admin():
+def requires_admin(**kw):
     if not g.user.admin:
         raise ProcessingException(description='Only admin can do this.')

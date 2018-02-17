@@ -4,8 +4,8 @@ var erittelySkeleton = `
         <div class="input-group-prepend">
             <label class="input-group-text btn btn-outline-secondary"> <span id="liitePh"><span class="fa fa-file"></span></span><input type="file" id="file" class="validate is-invalid" hidden/></label>
         </div>
-        <input class="form-control validate" placeholder="Kuvaus" id="kuvaus" name="kuvaus" type="text" />
-        <input class="form-control col-sm-1 text-right validate" placeholder="€" id="summa" name="summa" type="text" />
+        <input class="form-control validate" placeholder="Kuvaus" id="kuvaus" name="description" type="text" />
+        <input class="form-control col-sm-1 text-right validate" placeholder="€" id="summa" name="amount" type="text" />
         <div class="input-group-append">
             <button id="poista" class="btn btn-warning btn-outline-secondary" type="button"><span class="fa fa-trash-o"></span></button>
         </div>
@@ -90,10 +90,10 @@ function submit() {
     .then(function(liitteet) {
 
         var data = {
-            nimi: $('#nimi')[0].value,
+            submitter: $('#nimi')[0].value,
             iban: $('#iban')[0].value,
-            peruste: $('#peruste')[0].value,
-            liitteet: liitteet
+            description: $('#peruste')[0].value,
+            receipts: liitteet
         }
 
         console.log(data);
@@ -101,7 +101,7 @@ function submit() {
 
         $.ajax({
             type: 'post',
-            url: '/',
+            url: '/api/bills',
             data: JSON.stringify(data),
             contentType: 'application/json',
             complete: function(ret) {

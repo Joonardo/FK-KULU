@@ -1,10 +1,12 @@
 from DB import db
+from App import app
 from .receipt import Receipt
 from datetime import datetime
 from .render import latexify
 
 from flask_restless import ProcessingException
 from schwifty import IBAN
+from flask import send_from_directory
 
 class Bill(db.Model):
     __tablename__ = 'bills'
@@ -13,47 +15,61 @@ class Bill(db.Model):
     iban = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
-    receipts = db.relationship('Receipt', backref='bill', lazy=True)
+    #receipts = db.relationship('Receipt', backref='bill', lazy=True)
 
-    def __init__(self, submitter, iban, description, receipts=[]):
+    #def __init__(self, submitter, iban, description, receipts):
+    #    self.submitter = submitter
+    #    self.date = datetime.now()
+    #    self.iban = iban
+    #    self.description = description
+    #    self.receipts = receipts
+    #
+    #    for r in receipts:
+    #        r.bill = self
+    #        db.session.add(r)
+    #
+    #    db.session.add(self)
+    #    db.session.commit()
+
+    # Preprocessor for posting new bill
+    @staticmethod
+    def pre_post(**kw):
+
+        submitter = kw['data']['submitter']
+        iban = kw['data']['iban']
+        description = kw['data']['description']
+        receipts = kw['data']['receipts']
+
+        kw['data']['date'] = str(datetime.now())
 
         errors = []
 
-        if len(request.form.get('nimi', '\0')) == 0:
+        if len(submitter or '\0') == 0:
             errors.append('Nimi on pakollinen kenttä.')
 
         try:
-            IBAN(request.form.get('iban', '\0'))
+            IBAN(iban or '\0')
         except ValueError:
             errors.append('IBAN ei ole validi.')
 
-        if len(request.form.get('peruste', '\0')) == 0:
+        if len(description or '\0') == 0:
             errors.append('Maksun peruste tulee antaa.')
 
-        if len(request.form.get('ids', '\0')) == 0:
+        if len(receipts) == 0:
             errors.append('Tositteita ei löytynyt.')
 
         if len(errors) > 0:
             raise ProcessingException(description='\n'.join(errors))
 
-
-        self.submitter = submitter
-        self.date = datetime.now()
-        self.iban = iban
-        self.description = description
-        self.receipts = receipts
-
         for r in receipts:
-            r.bill = self
-            db.session.add(r)
+            Receipt.check(**r)
 
-        db.session.add(self)
-        db.session.commit()
+        nrs = []
+        for r in receipts:
+            nrs.append(Receipt.preprocess(**r))
+        kw['data']['receipts'] = nrs
 
-    # Preprocessor for posting new bill
-    @staticmethod
-    def pre_post(**kw):
-        kw['data']['receipts'] = [Receipt(**r) for r in kw['data']['receipts']]
+        print(kw['data'])
 
     @staticmethod
     def render(id):

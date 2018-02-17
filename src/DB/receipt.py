@@ -12,19 +12,22 @@ class Receipt(db.Model):
     filename = db.Column(db.String(128), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     bill_id = db.Column(db.Integer, db.ForeignKey('bills.id'), nullable=False)
+    bill = db.relationship('Bill', backref=db.backref('receipts', lazy='dynamic'))
 
-    def __init__(self, description, amount, content):
+    @staticmethod
+    def check(description, amount, content):
 
         if (not description) or (not amount) or (not content):
             raise ProcessingException(description='Tositteista puuttuu tietoja.')
 
-        self.description = description
-        self.amount = amount
-
+    @staticmethod
+    def preprocess(description, amount, content):
         header, data = content.split(',')
         data = a2b_base64(data)
         type = header.split('/')[1].split(';')[0]
-        self.filename = sha512(data).hexdigest() + '.pdf'
+        filename = sha512(data).hexdigest() + '.pdf'
 
-        with open(app.config['RECEIPTS_FOLDER'] + self.filename, 'wb') as f:
+        with open(app.config['RECEIPTS_FOLDER'] + filename, 'wb') as f:
             f.write(data)
+
+        return {'filename': filename, 'description': description, 'amount': amount}

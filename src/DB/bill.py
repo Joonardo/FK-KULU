@@ -15,21 +15,6 @@ class Bill(db.Model):
     iban = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
-    #receipts = db.relationship('Receipt', backref='bill', lazy=True)
-
-    #def __init__(self, submitter, iban, description, receipts):
-    #    self.submitter = submitter
-    #    self.date = datetime.now()
-    #    self.iban = iban
-    #    self.description = description
-    #    self.receipts = receipts
-    #
-    #    for r in receipts:
-    #        r.bill = self
-    #        db.session.add(r)
-    #
-    #    db.session.add(self)
-    #    db.session.commit()
 
     # Preprocessor for posting new bill
     @staticmethod

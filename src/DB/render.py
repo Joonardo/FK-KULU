@@ -69,7 +69,7 @@ def latexify(bill):
 
     # Kutsutaan kahdesti, jotta saadaan kuvat ja refit oikein
     dev = open(os.devnull, 'w')
-    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf])#, stdout=dev, stderr=STDOUT)
+    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
     ret |= call(['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
 
     os.unlink(texf)

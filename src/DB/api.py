@@ -14,7 +14,9 @@ manager.create_api(User,
                        'GET_MANY': [sec.auth],
                        'POST': [sec.auth],
                        'DELETE': [sec.auth, sec.requires_admin]
-                   })
+                   },
+                   exclude_columns=['password_hash']
+                   )
 
 manager.create_api(Bill,
                    methods=['GET', 'POST'],

@@ -9,6 +9,8 @@ from DB import User
 ser = TimedJSONWebSignatureSerializer(app.config['SECRET'], expires_in=3600)
 
 def auth(**kw):
+    if not 'auth' in request.headers:
+        raise ProcessingException(description='Unauthorized.')
     try:
         data = ser.loads(request.headers['auth'].encode('ascii'))
     except BadSignature:

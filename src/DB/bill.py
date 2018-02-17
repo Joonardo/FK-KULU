@@ -18,7 +18,7 @@ class Bill(db.Model):
 
     # Preprocessor for posting new bill
     @staticmethod
-    def pre_post(**kw):
+    def preprocess_post(**kw):
 
         submitter = kw['data']['submitter']
         iban = kw['data']['iban']
@@ -54,7 +54,9 @@ class Bill(db.Model):
             nrs.append(Receipt.preprocess(**r))
         kw['data']['receipts'] = nrs
 
-        print(kw['data'])
+    @staticmethod
+    def postprocess_get(**kw):
+        print(kw)
 
     @staticmethod
     def render(id):

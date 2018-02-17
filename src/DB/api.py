@@ -23,9 +23,10 @@ manager.create_api(Bill,
                    preprocessors={
                        'GET': [sec.auth],
                        'GET_MANY': [sec.auth],
-                       'POST': [Bill.pre_post]
-                   })
-
+                       'POST': [Bill.preprocess_post]
+                   },
+                   exclude_columns=['receipts']
+                   )
 
 @app.route('/api/bills/<id>/pdf', methods=['GET'])
 def download(id):

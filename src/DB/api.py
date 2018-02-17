@@ -24,8 +24,8 @@ manager.create_api(Bill,
                        'GET': [sec.auth],
                        'GET_MANY': [sec.auth],
                        'POST': [Bill.preprocess_post]
-                   },
-                   exclude_columns=['receipts']
+                   }
+                   #exclude_columns=['receipts']
                    )
 
 @app.route('/api/bills/<id>/pdf', methods=['GET'])

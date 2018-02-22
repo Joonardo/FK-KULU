@@ -1,13 +1,6 @@
 SECRET = "very secret key"
 DEBUG = True
 
-EMAIL = "\0"
-
-SECURE_PASSWORDS = False
-
-USER = "rahis"
-PASSWORD = "pw"
-
 RECEIPTS_FOLDER = '/tmp/'
 TMP_FOLDER = '/tmp/'
 

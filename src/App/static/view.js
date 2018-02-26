@@ -30,8 +30,16 @@ function render(resp) {
     for(var i = 0; i < bills.length; i++) {
         render_bill(bills[i])
     }
+
     $('.page').text(resp.responseJSON.page + '/' + resp.responseJSON.total_pages)
     page = resp.responseJSON.page
+
+    if(page >= resp.responseJSON.total_pages) {
+        $(".next").prop('disabled', true)
+    }
+    if(page === 1){
+        $('.prev').prop('disabled', true)
+    }
 }
 
 function download(query) {

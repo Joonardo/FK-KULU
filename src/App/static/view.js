@@ -30,6 +30,8 @@ function render(resp) {
     for(var i = 0; i < bills.length; i++) {
         render_bill(bills[i])
     }
+    $('.page').text(resp.responseJSON.page + '/' + resp.responseJSON.total_pages)
+    page = resp.responseJSON.page
 }
 
 function download(query) {
@@ -38,9 +40,9 @@ function download(query) {
         headers: {
             'Auth': localStorage.token
         },
-        // TODO search
         url: '/api/bills?' + $.param(query),
         complete: function(ret) {
+            $('button').prop('disabled', false)
             // TODO error handling
             if(ret.status === 400) {
                 window.location.href = "/login"
@@ -53,19 +55,22 @@ function download(query) {
     })
 }
 
-$('#prev').click(function() {
+$('.prev').click(function() {
     $('#table-body').empty()
+    $('button').prop('disabled', true)
     page -= 1
     download({page: page})
 })
 
-$('#next').click(function() {
+$('.next').click(function() {
     $('#table-body').empty()
+    $('button').prop('disabled', true)
     page += 1
     download({page: page})
 })
 
 $(document).ready(function() {
+    $('button').prop('disabled', true)
     console.log('Session: ' + localStorage.token);
     download({})
 })

@@ -3,18 +3,30 @@
 
 <h4 id="empty" hidden>Ei kulukorvauslomakkeita.</h4>
 
-<table id="table" class="table table-striped col-sm-12">
-    <thead>
-        <tr>
-            <th class="col-sm-4">Lähettäjä</th>
-            <th class="col-sm-4">Päiväys</th>
-            <th class="col-sm-4"></th>
-        </tr>
-    </thead>
-    <tbody id="table-body">
+<div id="table">
+    <div class="col-sm-4">
+        <button id="prev" class="btn btn-primary"><span class="fa fa-angle-left"></span></button>
+        <button id="next" class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+    </div>
 
-    </tbody>
-</table>
+    <table class="table table-striped col-sm-12">
+        <thead>
+            <tr>
+                <th class="col-sm-4">Lähettäjä</th>
+                <th class="col-sm-4">Päiväys</th>
+                <th class="col-sm-4"></th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+
+        </tbody>
+    </table>
+
+    <div class="col-sm-4">
+        <button id="prev" class="btn btn-primary"><span class="fa fa-angle-left"></span></button>
+        <button id="next" class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+    </div>
+</div>
 
 <script src="{{ url_for('static', filename='view.js') }}"></script>
 {% endblock %}

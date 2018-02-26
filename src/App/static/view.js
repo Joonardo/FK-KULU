@@ -11,6 +11,8 @@ bill_skeleton = `<tr>
     </th>
 </tr>`
 
+page = 1
+
 function render_bill(bill) {
     bill.date = (new Date(bill.date)).toLocaleDateString()
     m_bill = bill_skeleton
@@ -37,7 +39,7 @@ function download(query) {
             'Auth': localStorage.token
         },
         // TODO search
-        url: '/api/bills',
+        url: '/api/bills?' + $.param(query),
         complete: function(ret) {
             // TODO error handling
             if(ret.status === 400) {
@@ -51,8 +53,19 @@ function download(query) {
     })
 }
 
+$('#prev').click(function() {
+    $('#table-body').empty()
+    page -= 1
+    download({page: page})
+})
+
+$('#next').click(function() {
+    $('#table-body').empty()
+    page += 1
+    download({page: page})
+})
 
 $(document).ready(function() {
     console.log('Session: ' + localStorage.token);
-    download("")
+    download({})
 })

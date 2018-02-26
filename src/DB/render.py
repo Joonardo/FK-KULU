@@ -17,10 +17,10 @@ latex_jinja2_env = jinja2.Environment(
 	comment_start_string = '\#{',
 	comment_end_string = '}',
 	line_statement_prefix = '%%',
-	line_comment_prefix = '%#',
 	trim_blocks = True,
+    line_comment_prefix = '%#',
 	autoescape = False,
-	loader = jinja2.FileSystemLoader(os.path.abspath('./App/templates'))
+	loader = jinja2.FileSystemLoader('DB/templates')
 )
 
 def escape(s):

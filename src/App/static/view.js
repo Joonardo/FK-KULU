@@ -2,7 +2,7 @@ bill_skeleton = `<tr>
     <th>{submitter}</th>
     <th>{date}</th>
     <th>
-        <a href="/api/bills/{id}/pdf" class="btn btn-primary" role="button">
+        <a href="/api/pdf/{id}?token={token}" class="btn btn-primary" role="button">
             Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
         </a>
         <button id="btn" class="btn btn-success" role="button">
@@ -17,6 +17,7 @@ function render_bill(bill) {
     for(key in bill) {
         m_bill = m_bill.replace(new RegExp('{' + key + '}', 'g'), bill[key])
     }
+    m_bill = m_bill.replace(/{token}/g, localStorage.token)
     $("#table-body").append(m_bill)
 }
 
@@ -52,5 +53,6 @@ function download(query) {
 
 
 $(document).ready(function() {
+    console.log('Session: ' + localStorage.token);
     download("")
 })

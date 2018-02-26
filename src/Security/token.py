@@ -9,10 +9,12 @@ from DB import User
 ser = TimedJSONWebSignatureSerializer(app.config['SECRET'], expires_in=3600)
 
 def auth(**kw):
-    if not 'auth' in request.headers:
+    # Keyword parameter 'token' is used for download authentication.
+    if (not 'token' in request.args) and (not 'auth' in request.headers):
         raise ProcessingException(description='Unauthorized.')
     try:
-        data = ser.loads(request.headers['auth'].encode('ascii'))
+        token = request.args.get('token', None) or request.headers['auth']
+        data = ser.loads(token.encode('ascii'))
     except BadSignature:
         raise ProcessingException(description='Oops, something went wrong with your token...')
     except SignatureExpired:

@@ -28,7 +28,7 @@ manager.create_api(Bill,
                    #exclude_columns=['receipts']
                    )
 
-@app.route('/api/bills/<id>/pdf', methods=['GET'])
+@app.route('/api/pdf/<id>', methods=['GET'])
 def download(id):
     try:
         sec.auth()

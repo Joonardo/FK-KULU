@@ -64,9 +64,9 @@ class Bill(db.Model):
         if not fn:
             return "Oops...", 404
 
-        return send_from_directory(app.config['TMP_FOLDER'], fn, as_attachment=True)
+        return send_from_directory(app.config['TMP_FOLDER'], fn, as_attachment=True, attachment_filename=Bill.pretty_name(id))
 
     @staticmethod
-    def pretty_name(fn):
-        bill = Bill.query.filter_by(filename=fn).first()
-        return "{}-{}.pdf".format(bill.submitter.replace(" ", "_"), bill.date)
+    def pretty_name(id):
+        bill = Bill.query.get(id)
+        return "{}-{}.pdf".format(bill.submitter.replace(" ", "_"), bill.date.strftime('%d-%m-%Y'))

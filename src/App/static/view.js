@@ -21,7 +21,8 @@ function render_bill(bill) {
 }
 
 function render(resp) {
-    $("#table").show()
+    $("#table").prop('hidden', false)
+    $("#empty").prop('hidden', true)
     bills = resp.responseJSON.objects
     for(var i = 0; i < bills.length; i++) {
         render_bill(bills[i])
@@ -34,11 +35,14 @@ function download(query) {
         headers: {
             'Auth': localStorage.token
         },
+        // TODO search
         url: '/api/bills',
         complete: function(ret) {
             // TODO error handling
+            if(ret.status === 400) {
+                window.location.href = "/login"
+            }
             if(ret.responseJSON.num_results == 0) {
-                $("#empty").show()
                 return
             }
             render(ret)

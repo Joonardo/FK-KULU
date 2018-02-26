@@ -11,7 +11,7 @@ function submitLogin() {
         contentType: 'application/json',
         complete: function(ret) {
             localStorage.setItem("token", ret.responseJSON.token)
-            window.location.href = "google.com"
+            window.location.href = "/bills"
         }
     })
 }

@@ -13,6 +13,54 @@ bill_skeleton = `<tr>
 
 page = 1
 
+function search(ev) {
+    ev.preventDefault()
+
+    var queryObj = []
+
+    var subm = $("#name").val()
+    var date = $("#date").val()
+    var acc = $("#accepted").val()
+
+    if(subm != "") {
+        queryObj.push({
+            'name': 'submitter',
+            'op': 'like',
+            'val': '%' + subm + '%'
+        })
+    }
+
+    if(date != "") {
+        // Dirty hack to make search by date work
+        var d0 = (new Date(date)).toISOString()
+        var d1 = new Date(date)
+        d1.setDate(d1.getDate() + 1)
+        d1 = d1.toISOString()
+
+        queryObj.push({
+            'name': 'date',
+            'op': '<=',
+            'val': d1
+        })
+
+        queryObj.push({
+            'name': 'date',
+            'op': '>=',
+            'val': d0
+        })
+    }
+
+    if(acc != "Kaikki") {
+        queryObj.push({
+            'name': 'accepted',
+            'op': '==',
+            'val': acc === 'Hyväksytyt'
+        })
+    }
+
+    download({'q': JSON.stringify({'filters': queryObj})})
+}
+
 function render_bill(bill) {
     bill.date = (new Date(bill.date)).toLocaleDateString()
     m_bill = bill_skeleton
@@ -43,6 +91,8 @@ function render(resp) {
 }
 
 function download(query) {
+    $('#table-body').empty()
+    $('button').prop('disabled', true)
     $.ajax({
         type: 'get',
         headers: {
@@ -51,9 +101,9 @@ function download(query) {
         url: '/api/bills?' + $.param(query),
         complete: function(ret) {
             $('button').prop('disabled', false)
-            // TODO error handling
             if(ret.status === 400) {
-                window.location.href = "/login"
+                //window.location.href = "/login"
+                console.log(400);
             }
             if(ret.responseJSON.num_results == 0) {
                 return
@@ -63,21 +113,23 @@ function download(query) {
     })
 }
 
-$('.prev').click(function() {
-    $('#table-body').empty()
-    $('button').prop('disabled', true)
-    page -= 1
-    download({page: page})
-})
-
-$('.next').click(function() {
-    $('#table-body').empty()
-    $('button').prop('disabled', true)
-    page += 1
-    download({page: page})
-})
-
 $(document).ready(function() {
+    if(!localStorage.token) {
+        window.location.href = '/login'
+    }
+
+    $('#search').click(search)
+
+    $('.prev').click(function() {
+        page -= 1
+        download({page: page})
+    })
+
+    $('.next').click(function() {
+        page += 1
+        download({page: page})
+    })
+
     $('button').prop('disabled', true)
     console.log('Session: ' + localStorage.token);
     download({})

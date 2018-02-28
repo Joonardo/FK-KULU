@@ -9,7 +9,11 @@
             <form id="search-form">
                 <input id="date" placeholder="Päiväys" />
                 <input id="name" placeholder="Lähettäjä" /><br />
-                <label><input id="accepted" type="checkbox"/>Hyväksyttty</label>
+                <select id="accepted" type="checkbox" value="Kaikki">
+                    <option>Kaikki</option>
+                    <option>Hyväksytyt</option>
+                    <option>Hyväksymättömät</option>
+                </select>
                 <button id="search" class="btn btn-success">Hae&nbsp;<span class="fa fa-search"></span></button>
             </form>
         </div>

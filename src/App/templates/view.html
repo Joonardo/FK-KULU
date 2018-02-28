@@ -4,10 +4,21 @@
 <h4 id="empty" hidden>Ei kulukorvauslomakkeita.</h4>
 
 <div id="table">
-    <div class="col-sm-4">
-        <button class="prev btn btn-primary"><span class="fa fa-angle-left"></span></button>
-        <span class="page"></span>
-        <button class="next btn btn-primary"><span class="fa fa-angle-right"></span></button>
+    <div class="row">
+        <div class="col-sm-8">
+            <form id="search-form">
+                <input id="date" placeholder="Päiväys" />
+                <input id="name" placeholder="Lähettäjä" /><br />
+                <label><input id="accepted" type="checkbox"/>Hyväksyttty</label>
+                <button id="search" class="btn btn-success">Hae&nbsp;<span class="fa fa-search"></span></button>
+            </form>
+        </div>
+
+        <div class="col-sm-4">
+            <button class="prev btn btn-primary"><span class="fa fa-angle-left"></span></button>
+            <span class="page"></span>
+            <button class="next btn btn-primary"><span class="fa fa-angle-right"></span></button>
+        </div>
     </div>
 
     <table class="table table-striped col-sm-12">

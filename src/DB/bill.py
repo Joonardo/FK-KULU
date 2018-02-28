@@ -15,6 +15,7 @@ class Bill(db.Model):
     iban = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
+    accepted = db.Column(db.Boolean, default=False)
 
     # Preprocessor for posting new bill
     @staticmethod

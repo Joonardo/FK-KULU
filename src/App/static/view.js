@@ -1,6 +1,7 @@
 bill_skeleton = `<tr>
     <th>{submitter}</th>
     <th>{date}</th>
+    <th>{accepted}</th>
     <th>
         <a href="/api/pdf/{id}?token={token}" class="btn btn-primary" role="button">
             Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
@@ -63,7 +64,9 @@ function search(ev) {
 
 function render_bill(bill) {
     bill.date = (new Date(bill.date)).toLocaleDateString()
+    bill.accepted = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
     m_bill = bill_skeleton
+    console.log(bill.accepted);
     for(key in bill) {
         m_bill = m_bill.replace(new RegExp('{' + key + '}', 'g'), bill[key])
     }

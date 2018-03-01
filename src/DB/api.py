@@ -36,6 +36,15 @@ def download(id):
         return 'Oops, you are not allowed to do that.', 400
     return Bill.render(id)
 
+@app.route('/api/accept/<id>', methods=['POST'])
+def accept(id):
+    try:
+        sec.auth()
+    except ProcessingException:
+        return 'Oops, you are not allowed to do that.', 400
+    Bill.accept(id)
+    return "", 200
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()

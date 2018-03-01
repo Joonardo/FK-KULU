@@ -56,6 +56,13 @@ class Bill(db.Model):
         kw['data']['receipts'] = nrs
 
     @staticmethod
+    def accept(id):
+        bill = Bill.query.get(id)
+        bill.accepted = True
+        db.session.add(bill)
+        db.session.commit()
+
+    @staticmethod
     def postprocess_get(**kw):
         print(kw)
 

@@ -1,12 +1,12 @@
 bill_skeleton = `<tr>
     <th>{submitter}</th>
     <th>{date}</th>
-    <th>{accepted}</th>
+    <th id="accepted-{id}">{accepted}</th>
     <th>
         <a href="/api/pdf/{id}?token={token}" class="btn btn-primary" role="button">
             Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
         </a>
-        <button id="btn" class="btn btn-success" role="button">
+        <button id="btn-{id}" class="btn btn-success" role="button">
             <span class="fa fa-check-square-o"></span>
         </a>
     </th>
@@ -72,6 +72,18 @@ function render_bill(bill) {
     }
     m_bill = m_bill.replace(/{token}/g, localStorage.token)
     $("#table-body").append(m_bill)
+    $('#btn-' + bill.id).click(function() {
+        $.ajax({
+            type: 'post',
+            url: '/api/accept/' + bill.id,
+            headers: {
+                'Auth': localStorage.token
+            },
+            success: function() {
+                $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+            }
+        })
+    })
 }
 
 function render(resp) {
@@ -105,8 +117,7 @@ function download(query) {
         complete: function(ret) {
             $('button').prop('disabled', false)
             if(ret.status === 400) {
-                //window.location.href = "/login"
-                console.log(400);
+                window.location.href = "/login"
             }
             if(ret.responseJSON.num_results == 0) {
                 return
@@ -124,13 +135,11 @@ $(document).ready(function() {
     $('#search').click(search)
 
     $('.prev').click(function() {
-        page -= 1
-        download({page: page})
+        download({page: page - 1})
     })
 
     $('.next').click(function() {
-        page += 1
-        download({page: page})
+        download({page: page + 1})
     })
 
     $('button').prop('disabled', true)

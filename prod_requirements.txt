@@ -1,0 +1,6 @@
+flask
+schwifty
+flask_sqlalchemy
+flask_restless
+passlib
+pymysql

@@ -1,15 +1,15 @@
 bill_skeleton = `<tr title="{sum}€: {description}">
-    <th>{submitter}</th>
-    <th>{date}</th>
-    <th id="accepted-{id}">{accepted_visual}</th>
-    <th>
+    <td>{submitter}</th>
+    <td>{date}</th>
+    <td id="accepted-{id}">{accepted_visual}</th>
+    <td>
         <a href="/api/pdf/{id}?token={token}" class="btn btn-primary" role="button">
-            Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
+            <span class="fa fa-file-pdf-o"></span>
         </a>
         <button id="btn-{id}" class="btn btn-success" role="button">
             <span class="fa fa-check-square-o"></span>
         </a>
-    </th>
+    </td>
 </tr>`
 
 var entityMap = {
@@ -104,19 +104,27 @@ function render_bill(bill) {
 
     $('#btn-' + bill.id).click(function() {
         $('#modal').modal()
-        $('#modal').on('hide', function() {
-
+        $('#submit-accept').off('click')
+        $('#submit-accept').on('click', function() {
+            console.log(bill.id);
+            $.ajax({
+                type: 'post',
+                url: '/api/accept/' + bill.id,
+                data: JSON.stringify({
+                    description: $('#info').val()
+                }),
+                headers: {
+                    'Auth': localStorage.token
+                },
+                success: function() {
+                    $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+                },
+                error: function() {
+                    alert("Hyväksyminen ei onnistunut.")
+                }
+            })
+            $('#modal').modal('toggle')
         })
-        //$.ajax({
-        //    type: 'post',
-        //    url: '/api/accept/' + bill.id,
-        //    headers: {
-        //        'Auth': localStorage.token
-        //    },
-        //    success: function() {
-        //        $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
-        //    }
-        //})
     })
 }
 
@@ -174,6 +182,14 @@ $(document).ready(function() {
 
     $('.next').click(function() {
         download({page: page + 1})
+    })
+
+    $('#cancel-accept').click(function() {
+        $('#modal').modal('hide')
+    })
+
+    $('#modal').on('hide', function() {
+        $('#info').val('')
     })
 
     $('button').prop('disabled', true)

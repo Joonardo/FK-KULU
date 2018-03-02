@@ -1,6 +1,24 @@
 {% extends "index.html" %}
 {% block content %}
 
+<div id="modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="modal-header" class="modal-header">
+                Missä kokouksessa lomake hyväksyttiin?
+            </div>
+            <div class="modal-body">
+                <label for="info">Hyväksytty killan kokouksessa:</label>
+                <input id="info" class="form-control" type="text"/>
+            </div>
+            <div class="modal-footer">
+                <button id="submit-accept" class="btn btn-success">Hyväksy!</button>
+                <button id="cancel-accept" class="btn btn-danger">Peruuta!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <h4 id="empty" hidden>Ei kulukorvauslomakkeita.</h4>
 
 <div id="table">

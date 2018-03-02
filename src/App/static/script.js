@@ -96,17 +96,18 @@ function submit() {
             receipts: liitteet
         }
 
-        console.log(data);
-        console.log(JSON.stringify(data));
-
         $.ajax({
             type: 'post',
             url: '/api/bills',
             data: JSON.stringify(data),
             contentType: 'application/json',
             complete: function(ret) {
-                alert(ret.responseText); //TODO
-                console.log(ret);
+                console.log(ret.status === 400);
+                if(ret.status === 400) {
+                    alert(ret.responseText)
+                }else{
+                    alert('Lähetetty onnistuneesti.')
+                }
             }
         })
     })

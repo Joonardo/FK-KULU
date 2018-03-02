@@ -1,7 +1,7 @@
 bill_skeleton = `<tr title="{sum}€: {description}">
     <th>{submitter}</th>
     <th>{date}</th>
-    <th id="accepted-{id}">{accepted}</th>
+    <th id="accepted-{id}">{accepted_visual}</th>
     <th>
         <a href="/api/pdf/{id}?token={token}" class="btn btn-primary" role="button">
             Lataa&nbsp;<span class="fa fa-file-pdf-o"></span>
@@ -82,7 +82,7 @@ function search(ev) {
 function render_bill(bill) {
     bill.submitter = escapeHtml(bill.submitter)
     bill.date = (new Date(bill.date)).toLocaleDateString()
-    bill.accepted = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
+    bill.accepted_visual = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
     bill.sum = 0
 
     for(i in bill.receipts) {
@@ -96,17 +96,27 @@ function render_bill(bill) {
     }
     m_bill = m_bill.replace(/{token}/g, localStorage.token)
     $("#table-body").append(m_bill)
+
+    console.log(bill.accepted);
+    if(bill.accepted) {
+        $('#btn-' + bill.id).prop('hidden', true)
+    }
+
     $('#btn-' + bill.id).click(function() {
-        $.ajax({
-            type: 'post',
-            url: '/api/accept/' + bill.id,
-            headers: {
-                'Auth': localStorage.token
-            },
-            success: function() {
-                $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
-            }
+        $('#modal').modal()
+        $('#modal').on('hide', function() {
+
         })
+        //$.ajax({
+        //    type: 'post',
+        //    url: '/api/accept/' + bill.id,
+        //    headers: {
+        //        'Auth': localStorage.token
+        //    },
+        //    success: function() {
+        //        $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+        //    }
+        //})
     })
 }
 

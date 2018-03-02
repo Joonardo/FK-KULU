@@ -1,4 +1,4 @@
-bill_skeleton = `<tr>
+bill_skeleton = `<tr title="{sum}€: {description}">
     <th>{submitter}</th>
     <th>{date}</th>
     <th id="accepted-{id}">{accepted}</th>
@@ -11,6 +11,23 @@ bill_skeleton = `<tr>
         </a>
     </th>
 </tr>`
+
+var entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
+};
+
+function escapeHtml (string) { // Move to backend
+  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
 
 page = 1
 
@@ -63,10 +80,17 @@ function search(ev) {
 }
 
 function render_bill(bill) {
+    bill.submitter = escapeHtml(bill.submitter)
     bill.date = (new Date(bill.date)).toLocaleDateString()
     bill.accepted = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
+    bill.sum = 0
+
+    for(i in bill.receipts) {
+        bill.sum += parseInt(bill.receipts[i].amount)
+    }
+
     m_bill = bill_skeleton
-    console.log(bill.accepted);
+
     for(key in bill) {
         m_bill = m_bill.replace(new RegExp('{' + key + '}', 'g'), bill[key])
     }

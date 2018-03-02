@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usepackage{geometry}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 
 \geometry{margin=2cm}
 \newcommand{\stdlohn}[0]{11 \euro}
@@ -18,6 +19,7 @@
 %\renewcommand{\raggedsignature}{\raggedright}
  \renewcommand{\familydefault}{\sfdefault}
 
+ \pagenumbering{gobble}
 \begin{document}
 
 \large{FYYSIKKOKILTA~RY~--~Kulukorvauslomake} \\
@@ -47,12 +49,7 @@
 
   \end{longtable}
 
-  Hyväksytty raadin kokouksessa
-  %% if hyvaksytty
-  Kyllä
-  %% else
-  Ei
-  %% endif
+  Hyväksytty raadin kokouksessa \VAR{kokous}
 
 
   %\end{letter}
@@ -60,12 +57,7 @@
   \newpage
 
   %% for i in range(tositteet|length)
-    \begin{minipage}{\textwidth}
-      \centering
-      \textbf{Liite \VAR{i+1}} \\
-      \includegraphics{\VAR{tositteet[i]['liite']}} \\
-      \hrulefill
-    \end{minipage}
+    \includepdf[pages=-]{\VAR{tositteet[i]['liite']}}
   %% endfor
 
 \end{document}

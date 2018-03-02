@@ -61,6 +61,7 @@ def latexify(bill):
         peruste=escape(bill.description),
         tositteet=tositteet,
         hyvaksytty=bill.accepted,
+        kokous=bill.accepted_at,
         yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
     )
 

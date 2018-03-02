@@ -60,7 +60,7 @@ def latexify(bill):
         iban=escape(bill.iban),
         peruste=escape(bill.description),
         tositteet=tositteet,
-        # hyvaksytty=bill.accepted,
+        hyvaksytty=bill.accepted,
         yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
     )
 

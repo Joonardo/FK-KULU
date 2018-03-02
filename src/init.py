@@ -2,7 +2,7 @@ import sys
 from DB import db, User
 from Security import password
 
-if 'y' == input('Tämä tuohoaa tietokannan, oletko varma? [y/n]'):
+if 'y' != input('Tämä tuohoaa tietokannan, oletko varma? [y/n]'):
     sys.exit()
 
 

@@ -1,6 +1,12 @@
+import sys
 from DB import db, User
 from Security import password
 
+if 'y' not in input('Tämä tuohoaa tietokannan, oletko varma? [y/n]'):
+    sys.exit()
+
+
+db.drop_all()
 db.create_all()
 
 u = User()

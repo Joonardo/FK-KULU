@@ -113,10 +113,12 @@ function render_bill(bill) {
                 data: JSON.stringify({
                     description: $('#info').val()
                 }),
+                contentType: 'application/json',
                 headers: {
                     'Auth': localStorage.token
                 },
                 success: function() {
+                    $('#btn-' + bill.id).prop('hidden', true)
                     $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
                 },
                 error: function() {

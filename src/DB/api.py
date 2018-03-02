@@ -42,7 +42,10 @@ def accept(id):
         sec.auth()
     except ProcessingException:
         return 'Oops, you are not allowed to do that.', 400
-    Bill.accept(id, request.form['description'])
+    data = request.get_json()
+    if not data or not 'description' in data or data['description'] == "":
+        return "", 400
+    Bill.accept(id, data['description'])
     return "", 200
 
 @app.route('/api/login', methods=['POST'])

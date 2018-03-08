@@ -1,6 +1,7 @@
 from flask import render_template
 from App import app
 
+
 @app.route('/', methods=['GET'])
 def form():
     return render_template('form.html')

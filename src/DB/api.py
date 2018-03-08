@@ -1,7 +1,7 @@
 from flask_restless import APIManager, ProcessingException
-from flask import jsonify, request, make_response
+from flask import jsonify, request
 
-from DB import Bill, Receipt, User, db
+from DB import Bill, User, db
 from App import app
 import Security.token as sec
 
@@ -25,8 +25,9 @@ manager.create_api(Bill,
                        'GET_MANY': [sec.auth],
                        'POST': [Bill.preprocess_post]
                    }
-                   #exclude_columns=['receipts']
+                   # exclude_columns=['receipts']
                    )
+
 
 @app.route('/api/pdf/<id>', methods=['GET'])
 def download(id):
@@ -36,6 +37,7 @@ def download(id):
         return 'Oops, you are not allowed to do that.', 400
     return Bill.render(id)
 
+
 @app.route('/api/accept/<id>', methods=['POST'])
 def accept(id):
     try:
@@ -43,10 +45,11 @@ def accept(id):
     except ProcessingException:
         return 'Oops, you are not allowed to do that.', 400
     data = request.get_json()
-    if not data or not 'description' in data or data['description'] == "":
+    if not data or 'description' not in data or data['description'] == "":
         return "", 400
     Bill.accept(id, data['description'])
     return "", 200
+
 
 @app.route('/api/login', methods=['POST'])
 def login():

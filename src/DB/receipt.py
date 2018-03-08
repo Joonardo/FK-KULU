@@ -1,9 +1,9 @@
 from DB import db
-from .user import User
 from hashlib import sha512
 from binascii import a2b_base64
 from App import app
 from flask_restless import ProcessingException
+
 
 class Receipt(db.Model):
     __tablename__ = 'receipts'
@@ -30,4 +30,8 @@ class Receipt(db.Model):
         with open(app.config['RECEIPTS_FOLDER'] + filename, 'wb') as f:
             f.write(data)
 
-        return {'filename': filename, 'description': description, 'amount': amount}
+        return {
+                'filename': filename,
+                'description': description,
+                'amount': amount
+                }

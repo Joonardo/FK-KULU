@@ -8,6 +8,7 @@ from flask_restless import ProcessingException
 from schwifty import IBAN
 from flask import send_from_directory
 
+
 class Bill(db.Model):
     __tablename__ = 'bills'
     id = db.Column(db.Integer, primary_key=True)

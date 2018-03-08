@@ -1,27 +1,24 @@
-import shutil
 import os
-from datetime import datetime
-import time
 import jinja2
 from uuid import uuid4
-from werkzeug.utils import secure_filename
 from subprocess import call, STDOUT
 from App import app
 
 
 latex_jinja2_env = jinja2.Environment(
-    block_start_string = '\BLOCK{',
-	block_end_string = '}',
-	variable_start_string = '\VAR{',
-	variable_end_string = '}',
-	comment_start_string = '\#{',
-	comment_end_string = '}',
-	line_statement_prefix = '%%',
-	trim_blocks = True,
-    line_comment_prefix = '%#',
-	autoescape = False,
-	loader = jinja2.FileSystemLoader('DB/templates')
+    block_start_string='\BLOCK{',
+    block_end_string='}',
+    variable_start_string='\VAR{',
+    variable_end_string='}',
+    comment_start_string='\#{',
+    comment_end_string='}',
+    line_statement_prefix='%%',
+    trim_blocks=True,
+    line_comment_prefix='%#',
+    autoescape=False,
+    loader=jinja2.FileSystemLoader('DB/templates')
 )
+
 
 def escape(s):
     escaped_chars = {
@@ -41,7 +38,7 @@ def escape(s):
         '>':  "\\textgreater{}",
         '^':  "\\textasciicircum{}",
         '`':  "{}`",
-        '\n': "\\\\" # xkcd.com/1638/
+        '\n': "\\\\"  # xkcd.com/1638/
     }
     res = ""
     for c in s:
@@ -52,7 +49,11 @@ def escape(s):
 def latexify(bill):
     id = str(uuid4())
 
-    tositteet = [{'summa': escape(str(t.amount)), 'liite': app.config['RECEIPTS_FOLDER'] + t.filename, 'kuvaus': escape(t.description)} for t in bill.receipts]
+    tositteet = [{
+                    'summa': escape(str(t.amount)),
+                    'liite': app.config['RECEIPTS_FOLDER'] + t.filename,
+                    'kuvaus': escape(t.description)
+                } for t in bill.receipts]
 
     template = latex_jinja2_env.get_template('template.tex')
     formatted = template.render(
@@ -71,8 +72,12 @@ def latexify(bill):
 
     # Kutsutaan kahdesti, jotta saadaan kuvat ja refit oikein
     dev = open(os.devnull, 'w')
-    ret = call(['pdflatex', '-halt-on-error','-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
-    ret |= call(['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf], stdout=dev, stderr=STDOUT)
+    ret = call(
+            ['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf],
+            stdout=dev, stderr=STDOUT)
+    ret |= call(
+            ['pdflatex', '-halt-on-error', '-output-directory', app.config['TMP_FOLDER'], texf],
+            stdout=dev, stderr=STDOUT)
 
     os.unlink(texf)
 

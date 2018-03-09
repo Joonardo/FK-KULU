@@ -1,5 +1,7 @@
 SECRET = "very secret key"
-DEBUG = True
+DEBUG = False
+
+LOG_FILE = "log"
 
 RECEIPTS_FOLDER = '/tmp/'
 TMP_FOLDER = '/tmp/'

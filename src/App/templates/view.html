@@ -5,11 +5,62 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="modal-header" class="modal-header">
-                Missä kokouksessa lomake hyväksyttiin?
+
             </div>
             <div class="modal-body">
-                <label for="info">Hyväksytty killan kokouksessa:</label>
-                <input id="info" class="form-control" type="text"/>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Lähettäjä</strong>
+                    </div>
+                    <div id="modal-submitter" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Päivämäärä</strong>
+                    </div>
+                    <div id="modal-date" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>IBAN</strong>
+                    </div>
+                    <div id="modal-iban" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Peruste</strong>
+                    </div>
+                    <div id="modal-description" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Tositteet</strong>
+                    </div>
+                    <div id="modal-receipts" class="col-sm-8 col-sm-offset-1">
+
+                    </div>
+                </div>
+                <div class="row" id="modal-accepted">
+                    <div class="col-sm-3">
+                        <strong>Hyväksytty</strong>
+                    </div>
+                    <div id="modal-accepted-at" class="col-sm-8 col-sm-offset-1">
+
+                    </div>
+                </div>
+                <div id="modal-accept-form" class="form form-inline">
+                    <label for="info"><strong>Hyväksytty&nbsp<strong></label>
+                    <input id="info" class="form-control" type="text" placeholder="Kuvaus"/>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button id="submit-accept" class="btn btn-success">Hyväksy!</button>

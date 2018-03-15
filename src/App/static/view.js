@@ -29,6 +29,50 @@ function escapeHtml (string) { // Move to backend
   });
 }
 
+receipt_skel = `
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-sm-2">
+        <strong>{amount}€</strong>
+    </div>
+
+    <div class="col-sm-10">
+        {description}
+    </div>
+</div>
+`
+
+function show(bill) {
+    $("#modal-header").text("Kulukorvauslomake #" + bill.id)
+    $("#modal-submitter").text(escapeHtml(bill.submitter))
+    $("#modal-date").text((new Date(bill.date)).toLocaleDateString())
+    $("#modal-iban").text(escapeHtml(bill.iban))
+    $("#modal-description").text(escapeHtml(bill.description))
+    $("#modal-accepted-at").text(escapeHtml(bill.accepted_at))
+
+    $("#modal-receipts").empty()
+
+    for(i in bill.receipts) {
+        r = bill.receipts[i]
+        rec = receipt_skel
+            .replace(/{description}/g, escapeHtml(r.description))
+            .replace(/{amount}/g, escapeHtml(r.amount))
+        $("#modal-receipts").append(rec)
+    }
+
+    $('#modal').modal()
+
+    if(bill.accepted) {
+        $("#modal-accept-form").addClass('hidden')
+        $("#modal-accepted").removeClass('hidden')
+        $("#submit-accept").hide()
+        $("#modal-accepted-at").text(escapeHtml(bill.accepted_at))
+    }else{
+        $("#modal-accept-form").removeClass('hidden')
+        $("#modal-accepted").addClass('hidden')
+        $("#submit-accept").show()
+    }
+}
+
 page = 1
 
 function search(ev) {
@@ -80,9 +124,8 @@ function search(ev) {
 }
 
 function render_bill(bill) {
-    bill.submitter = escapeHtml(bill.submitter)
     bill.date = (new Date(bill.date)).toLocaleDateString()
-    bill.accepted_visual = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
+    accepted_visual = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
     bill.sum = 0
 
     for(i in bill.receipts) {
@@ -92,18 +135,14 @@ function render_bill(bill) {
     m_bill = bill_skeleton
 
     for(key in bill) {
-        m_bill = m_bill.replace(new RegExp('{' + key + '}', 'g'), bill[key])
+        m_bill = m_bill.replace(new RegExp('{' + key + '}', 'g'), escapeHtml(bill[key]))
     }
+    m_bill = m_bill.replace(/{accepted_visual}/g, accepted_visual)
     m_bill = m_bill.replace(/{token}/g, localStorage.token)
     $("#table-body").append(m_bill)
 
-    console.log(bill.accepted);
-    if(bill.accepted) {
-        $('#btn-' + bill.id).prop('hidden', true)
-    }
-
     $('#btn-' + bill.id).click(function() {
-        $('#modal').modal()
+        show(bill)
         $('#submit-accept').off('click')
         $('#submit-accept').on('click', function() {
             console.log(bill.id);
@@ -118,8 +157,8 @@ function render_bill(bill) {
                     'Auth': localStorage.token
                 },
                 success: function() {
-                    $('#btn-' + bill.id).prop('hidden', true)
                     $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+                    alert("Kulukorvauslomake hyväksytty.")
                 },
                 error: function() {
                     alert("Hyväksyminen ei onnistunut.")

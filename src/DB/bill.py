@@ -18,6 +18,7 @@ class Bill(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     accepted = db.Column(db.Boolean, default=False)
     accepted_at = db.Column(db.Unicode, nullable=True)
+    hidden = db.Column(db.Boolean, default=False)
 
     # Preprocessor for posting new bill
     @staticmethod
@@ -62,6 +63,13 @@ class Bill(db.Model):
         bill = Bill.query.get(id)
         bill.accepted = True
         bill.accepted_at = accepted_at
+        db.session.add(bill)
+        db.session.commit()
+
+    @staticmethod
+    def toggle_hidden(id):
+        bill = Bill.query.get(id)
+        bill.hidden = not bill.hidden
         db.session.add(bill)
         db.session.commit()
 

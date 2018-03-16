@@ -51,6 +51,15 @@ def accept(id):
     return "", 200
 
 
+@app.route('/api/toggleHide/<id>', methods=['POST'])
+def toggle_hide(id):
+    try:
+        sec.auth()
+    except ProcessingException:
+        return 'Oops, you are not allowed to do that.', 400
+    Bill.toggle_hidden(id)
+    return "", 200
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()

@@ -75,13 +75,15 @@ function show(bill) {
 
 page = 1
 
-function search(ev) {
-    ev.preventDefault()
+function search(ev, page=1) {
+    if(ev)
+        ev.preventDefault()
 
     var queryObj = []
 
     var subm = $("#name").val()
-    var date = $("#date").val()
+    var sdate = $("#sdate").val()
+    var edate = $("#edate").val()
     var acc = $("#accepted").val()
 
     if(subm != "") {
@@ -92,18 +94,8 @@ function search(ev) {
         })
     }
 
-    if(date != "") {
-        // Dirty hack to make search by date work
-        var d0 = (new Date(date)).toISOString()
-        var d1 = new Date(date)
-        d1.setDate(d1.getDate() + 1)
-        d1 = d1.toISOString()
-
-        queryObj.push({
-            'name': 'date',
-            'op': '<=',
-            'val': d1
-        })
+    if(sdate != "") {
+        var d0 = (new Date(sdate)).toISOString()
 
         queryObj.push({
             'name': 'date',
@@ -112,15 +104,47 @@ function search(ev) {
         })
     }
 
-    if(acc != "Kaikki") {
+    if(edate != "") {
+        var d1 = (new Date(edate)).toISOString()
+
         queryObj.push({
-            'name': 'accepted',
-            'op': '==',
-            'val': acc === 'Hyväksytyt'
+            'name': 'date',
+            'op': '<=',
+            'val': d1
         })
     }
 
-    download({'q': JSON.stringify({'filters': queryObj})})
+    switch (acc) {
+        case "Kaikki":
+            queryObj.push({
+                'name': 'hidden',
+                'op': '==',
+                'val': false
+            })
+            break;
+        case "Hyväksytyt":
+            queryObj.push({
+                'name': 'accepted',
+                'op': '==',
+                'val': true
+            })
+            break;
+        case "Hyväksymättömät":
+            queryObj.push({
+                'name': 'accepted',
+                'op': '==',
+                'val': false
+            })
+            break;
+        case "Piilotetut":
+            queryObj.push({
+                'name': 'hidden',
+                'op': '==',
+                'val': true
+            })
+            break;
+    }
+    download({'q': JSON.stringify({'filters': queryObj}), 'page': page})
 }
 
 function render_bill(bill) {
@@ -218,11 +242,11 @@ $(document).ready(function() {
     $('#search').click(search)
 
     $('.prev').click(function() {
-        download({page: page - 1})
+        search(undefined, page - 1)
     })
 
     $('.next').click(function() {
-        download({page: page + 1})
+        search(undefined, page + 1)
     })
 
     $('#cancel-accept').click(function() {
@@ -234,6 +258,6 @@ $(document).ready(function() {
     })
 
     $('button').prop('disabled', true)
-    console.log('Session: ' + localStorage.token);
-    download({})
+
+    search(undefined)
 })

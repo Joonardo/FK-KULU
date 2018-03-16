@@ -64,29 +64,34 @@
             </div>
             <div class="modal-footer">
                 <button id="submit-accept" class="btn btn-success">Hyväksy!</button>
-                <button id="cancel-accept" class="btn btn-danger">Peruuta!</button>
+                <button id="submit-toggle-hide" class="btn btn-success"></button>
+                <button id="cancel-accept" class="btn btn-danger">Sulje.</button>
             </div>
         </div>
     </div>
 </div>
 
-<h4 id="empty" hidden>Ei kulukorvauslomakkeita.</h4>
+<h4 id="empty" class="hidden">Ei kulukorvauslomakkeita.</h4>
 
 <div id="table">
     <div class="row">
         <div class="col-sm-8">
             <form id="search-form" class="form-inline">
-                <div class="col-sm-7">
-                    <input id="name" class="form-control" placeholder="Lähettäjä" />
-                    <input id="date" class="form-control" placeholder="Päiväys" />
+                <div class="form-group col-sm-12">
+                    <input id="name" class="form-control col-sm-12" placeholder="Lähettäjä" />
                 </div>
-                <div class="form-group col-sm-8">
-                    <select class="form-control" id="accepted" type="checkbox" value="Kaikki">
+                <div class="form-group col-sm-12">
+                    <input id="sdate" class="form-control col-sm-6" placeholder="Alku YYYY-MM-DD" />
+                    <input id="edate" class="form-control col-sm-6" placeholder="Loppu YYYY-MM-DD" />
+                </div>
+                <div class="form-group col-sm-12">
+                    <select class="form-control col-sm-9" id="accepted" type="checkbox" value="Kaikki">
                         <option>Kaikki</option>
                         <option>Hyväksytyt</option>
                         <option>Hyväksymättömät</option>
+                        <option>Piilotetut</option>
                     </select>
-                    <button id="search" class="form-control btn btn-success">Hae&nbsp;<span class="fa fa-search"></span></button>
+                    <button id="search" class="form-control col-sm-3 btn btn-success">Hae&nbsp;<span class="fa fa-search"></span></button>
                 </div>
             </form>
         </div>
@@ -98,7 +103,7 @@
         </div>
     </div>
 
-    <table class="table table-striped col-sm-12">
+    <table class="table table-striped col-sm-12" style="margin-top:20px;">
         <thead>
             <tr>
                 <th class="col-sm-4" style="width: 35%;">Lähettäjä</th>

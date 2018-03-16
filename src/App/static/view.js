@@ -48,6 +48,22 @@ function show(bill) {
     $("#modal-iban").text(escapeHtml(bill.iban))
     $("#modal-description").text(escapeHtml(bill.description))
     $("#modal-accepted-at").text(escapeHtml(bill.accepted_at))
+    $("#submit-toggle-hide").text(bill.hidden ? "Palauta." : "Piilota.")
+
+    $("#submit-toggle-hide").off('click')
+    $("#submit-toggle-hide").click(function() {
+        $.ajax({
+            type: "post",
+            url: "/api/toggleHide/" + bill.id,
+            contentType: 'application/json',
+            headers: {
+                'Auth': localStorage.token
+            },
+            success: function(ret) {
+                alert(bill.hidden ? "Palautettu." : "Piilotettu.")
+            }
+        })
+    })
 
     $("#modal-receipts").empty()
 
@@ -128,10 +144,20 @@ function search(ev, page=1) {
                 'op': '==',
                 'val': true
             })
+            queryObj.push({
+                'name': 'hidden',
+                'op': '==',
+                'val': false
+            })
             break;
         case "Hyväksymättömät":
             queryObj.push({
                 'name': 'accepted',
+                'op': '==',
+                'val': false
+            })
+            queryObj.push({
+                'name': 'hidden',
                 'op': '==',
                 'val': false
             })

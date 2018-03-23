@@ -75,7 +75,13 @@ class Bill(db.Model):
 
     @staticmethod
     def postprocess_get(**kw):
-        print(kw)
+        pass
+
+    @classmethod
+    def query(cls):
+        orig = db.session.query(cls)
+        return orig.order_by(Bill.date.desc())
+
 
     @staticmethod
     def render(id):

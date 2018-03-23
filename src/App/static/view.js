@@ -7,7 +7,7 @@ bill_skeleton = `<tr title="{sum}€: {description}">
             <span class="fa fa-file-pdf-o"></span>
         </a>
         <button id="btn-{id}" class="btn btn-success" role="button">
-            <span class="fa fa-check-square-o"></span>
+            <span class="fa fa-search"></span>
         </a>
     </td>
 </tr>`

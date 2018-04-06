@@ -60,6 +60,7 @@ def toggle_hide(id):
     Bill.toggle_hidden(id)
     return "", 200
 
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -67,3 +68,17 @@ def login():
         return '', 400
     message, token = sec.get_auth_token(data['username'], data['password'])
     return jsonify({'message': message, 'token': token})
+
+
+@app.route('/api/requestPasswordChange', methods=["POST"])
+def request_password_change_api():
+    json = request.get_json()
+    if 'email' not in json:
+        return "", 400
+    users = User.query.filter_by(email=json['email']).all()
+    if len(users) == 0:
+        return "", 400
+
+    users[0].request_password_change()
+
+    return "", 200

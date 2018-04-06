@@ -14,7 +14,8 @@ class User(db.Model):
     restore_valid = db.Column(db.DateTime)
 
     def change_password(self, pw):
-        # TODO: check if valid
+        if not self.restore_valid or datetime.now() > self.restore_valid:
+            return "", 400
         self.password_hash = pw.hash(pw)
         self.restore_id = None
         self.restore_valid = None

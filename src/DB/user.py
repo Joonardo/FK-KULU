@@ -2,6 +2,7 @@ from DB import db
 from uuid import uuid4
 from datetime import datetime, timedelta
 import Security.password as pw
+import Mailer
 
 
 class User(db.Model):
@@ -13,10 +14,10 @@ class User(db.Model):
     restore_id = db.Column(db.Text, unique=True)
     restore_valid = db.Column(db.DateTime)
 
-    def change_password(self, pw):
+    def change_password(self, password):
         if not self.restore_valid or datetime.now() > self.restore_valid:
             return "", 400
-        self.password_hash = pw.hash(pw)
+        self.password_hash = pw.hash(password)
         self.restore_id = None
         self.restore_valid = None
         db.session.add(self)
@@ -26,6 +27,9 @@ class User(db.Model):
     def request_password_change(self):
         self.restore_id = str(uuid4())
         self.restore_valid = datetime.now() + timedelta(days=1)
+
+        Mailer.send_password_restore(self)
+
         db.session.add(self)
         db.session.commit()
 

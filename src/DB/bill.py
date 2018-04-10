@@ -60,7 +60,7 @@ class Bill(db.Model):
 
     @staticmethod
     def accept(id, accepted_at):
-        bill = Bill.query.get(id)
+        bill = Bill.query().get(id)
         bill.accepted = True
         bill.accepted_at = accepted_at
         db.session.add(bill)
@@ -68,7 +68,7 @@ class Bill(db.Model):
 
     @staticmethod
     def toggle_hidden(id):
-        bill = Bill.query.get(id)
+        bill = Bill.query().get(id)
         bill.hidden = not bill.hidden
         db.session.add(bill)
         db.session.commit()
@@ -85,7 +85,7 @@ class Bill(db.Model):
 
     @staticmethod
     def render(id):
-        fn = latexify(Bill.query.get(id))
+        fn = latexify(Bill.query().get(id))
         if not fn:
             return "Oops...", 404
 
@@ -93,5 +93,5 @@ class Bill(db.Model):
 
     @staticmethod
     def pretty_name(id):
-        bill = Bill.query.get(id)
+        bill = Bill.query().get(id)
         return "{}-{}.pdf".format(bill.submitter.replace(" ", "_"), bill.date.strftime('%d-%m-%Y'))

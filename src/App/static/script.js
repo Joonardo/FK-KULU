@@ -57,7 +57,7 @@ function AddTositeField() {
         var parts = $(this)[0].value.split("\\")
         var fn = parts[parts.length-1]
         elem.find("#liitePh").text(fn.length > 0 ? " " + fn.slice(0,4) + '..' : "")
-        elem.find("#label").prop("title", fn.length > 0 ? fn : "")
+        elem.find("#label").prop("title", fn.length > 0 ? fn : "Valitse PDF-tiedosto.")
         var files = $(this)[0].files
         setValidation($(this), files.length > 0 && files[0].type === 'application/pdf')
 

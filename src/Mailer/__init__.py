@@ -29,8 +29,7 @@ def _send(users, subject, content):
 
 
 def send_password_restore(user):
-    # TODO: HTTPS
-    url = "http://kulu.fyysikkokilta.fi/restore/{id}".format(id=user.restore_id)
+    url = "https://kulu.fyysikkokilta.fi/restore/{id}".format(id=user.restore_id)
     return _send([user], "Salasanan vaihto", """
         Hei,
 
@@ -45,8 +44,7 @@ def send_password_restore(user):
 
 
 def send_bill_notification(users):
-    # TODO: HTTPS
-    url = "http://kulu.fyysikkokilta.fi/bills"
+    url = "https://kulu.fyysikkokilta.fi/bills"
     return _send(users, "Uusia kulukorvauksia", """
         Hei,
 

@@ -63,6 +63,7 @@ def latexify(bill):
         tositteet=tositteet,
         hyvaksytty=bill.accepted,
         kokous=bill.accepted_at,
+        pvm=bill.date,
         yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
     )
 

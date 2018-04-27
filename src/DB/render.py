@@ -64,6 +64,7 @@ def latexify(bill):
         hyvaksytty=bill.accepted,
         kokous=bill.accepted_at,
         pvm=bill.date.strftime('%d-%m-%Y'),
+        maksupvm=bill.paid,
         yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
     )
 

@@ -18,6 +18,7 @@ class Bill(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     accepted = db.Column(db.Boolean, default=False)
     accepted_at = db.Column(db.Unicode, nullable=True)
+    paid = db.Column(db.Unicode, nullable=True)
     hidden = db.Column(db.Boolean, default=False)
 
     # Preprocessor for posting new bill
@@ -59,10 +60,11 @@ class Bill(db.Model):
         kw['data']['receipts'] = nrs
 
     @staticmethod
-    def accept(id, accepted_at):
+    def accept(id, accepted_at, paid):
         bill = Bill.query().get(id)
         bill.accepted = True
         bill.accepted_at = accepted_at
+        bill.paid = paid
         db.session.add(bill)
         db.session.commit()
 

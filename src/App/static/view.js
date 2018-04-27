@@ -87,6 +87,9 @@ function show(bill) {
         $("#modal-accepted").addClass('hidden')
         $("#submit-accept").show()
     }
+    if(bill.paid != "") {
+        $("#pvm").attr("placeholder", escapeHtml(bill.paid))
+    }
 }
 
 page = 1
@@ -200,7 +203,8 @@ function render_bill(bill) {
                 type: 'post',
                 url: '/api/accept/' + bill.id,
                 data: JSON.stringify({
-                    description: $('#info').val()
+                    description: $('#info').val(),
+                    paidDesc: $('#pvm').val()
                 }),
                 contentType: 'application/json',
                 headers: {

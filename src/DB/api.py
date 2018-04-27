@@ -47,7 +47,7 @@ def accept(id):
     data = request.get_json()
     if not data or 'description' not in data or data['description'] == "":
         return "", 400
-    Bill.accept(id, data['description'])
+    Bill.accept(id, data['description'], data['paidDesc'])
     return "", 200
 
 

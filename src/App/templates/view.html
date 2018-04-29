@@ -1,0 +1,132 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div id="modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="modal-header" class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Lähettäjä</strong>
+                    </div>
+                    <div id="modal-submitter" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Päivämäärä</strong>
+                    </div>
+                    <div id="modal-date" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>IBAN</strong>
+                    </div>
+                    <div id="modal-iban" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Peruste</strong>
+                    </div>
+                    <div id="modal-description" class="col-sm-6 col-sm-offset-4">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Tositteet</strong>
+                    </div>
+                    <div id="modal-receipts" class="col-sm-8 col-sm-offset-1">
+
+                    </div>
+                </div>
+                <div class="row" id="modal-accepted">
+                    <div class="col-sm-3">
+                        <strong>Hyväksytty</strong>
+                    </div>
+                    <div id="modal-accepted-at" class="col-sm-8 col-sm-offset-1">
+
+                    </div>
+                </div>
+                <div id="modal-accept-form" class="form form-inline">
+                    <label for="info"><strong>Hyväksytty&nbsp<strong></label>
+                    <input id="info" class="form-control" type="text" placeholder="Kuvaus"/>
+                </div>
+                <div id="modal-paid-form" class="form form-inline">
+                    <label for="pvm"><strong>Maksettu&nbsp<strong></label>
+                    <input id="pvm" class="form-control" type="text" placeholder="Maksu pvm."/>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="submit-accept" class="btn btn-success">Hyväksy!</button>
+                <button id="submit-toggle-hide" class="btn"></button>
+                <button id="cancel-accept" class="btn btn-danger">Sulje.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 id="empty" class="hidden">Ei kulukorvauslomakkeita.</h4>
+
+<div id="table">
+    <div class="row">
+        <div class="col-sm-8">
+            <form id="search-form" class="form-inline">
+                <div class="form-group col-sm-12">
+                    <input id="name" class="form-control col-sm-12" placeholder="Lähettäjä" />
+                </div>
+                <div class="form-group col-sm-12">
+                    <input id="sdate" class="form-control col-sm-6" placeholder="Alku YYYY-MM-DD" />
+                    <input id="edate" class="form-control col-sm-6" placeholder="Loppu YYYY-MM-DD" />
+                </div>
+                <div class="form-group col-sm-12">
+                    <select class="form-control col-sm-9" id="accepted" type="checkbox" value="Kaikki">
+                        <option>Kaikki</option>
+                        <option>Hyväksytyt</option>
+                        <option>Hyväksymättömät</option>
+                        <option>Piilotetut</option>
+                    </select>
+                    <button id="search" class="form-control col-sm-3 btn btn-success">Hae&nbsp;<span class="fa fa-search"></span></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-4">
+            <button class="prev btn btn-primary"><span class="fa fa-angle-left"></span></button>
+            <span class="page"></span>
+            <button class="next btn btn-primary"><span class="fa fa-angle-right"></span></button>
+        </div>
+    </div>
+
+    <table class="table table-striped col-sm-12" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <th class="col-sm-4" style="width: 35%;">Lähettäjä</th>
+                <th class="col-sm-3" style="width: 25%;">Päiväys</th>
+                <th class="col-sm-2" style="width: 15%;">Hyväksytty</th>
+                <th class="col-sm-3" style="width: 25%;"></th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+
+        </tbody>
+    </table>
+
+    <div class="col-sm-4">
+        <button class="prev btn btn-primary"><span class="fa fa-angle-left"></span></button>
+        <span class="page"></span>
+        <button class="next btn btn-primary"><span class="fa fa-angle-right"></span></button>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='view.js') }}"></script>
+{% endblock %}

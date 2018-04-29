@@ -1,12 +1,23 @@
-SECRET = "very_secret_key"
-DEBUG = True
+SECRET = "very secret key"
+DEBUG = False
 
-EMAIL = "\0"
+LOG_FILE = "log"
+LOG_FORMAT = '''
+Message type:       %(levelname)s
+Location:           %(pathname)s:%(lineno)d
+Module:             %(module)s
+Function:           %(funcName)s
+Time:               %(asctime)s
 
-SECURE_PASSWORDS = False
+Message:
 
-USER = "rahis"
-PASSWORD = "pw"
+%(message)s
+'''
+
+SENDGRID_APIKEY = "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"
+
+RECEIPTS_FOLDER = '/tmp/'
+TMP_FOLDER = '/tmp/'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/dev.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False

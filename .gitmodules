@@ -1,3 +1,3 @@
-[submodule "src/static/iban.js"]
-	path = src/static/iban.js
+[submodule "src/src/App/static/iban.js"]
+	path = src/App/static/iban.js
 	url = https://github.com/arhs/iban.js.git

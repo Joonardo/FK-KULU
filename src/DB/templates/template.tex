@@ -1,6 +1,4 @@
-\documentclass[DIN, pagenumber=false, parskip=half,
-               fromalign=right, fromphone=false, fromfax=false,
-               fromrule=false]{scrlttr2}
+\documentclass[a4paper,12pt]{article}
 
 
 \usepackage[finnish]{babel}
@@ -10,29 +8,35 @@
 \usepackage{longtable}
 \usepackage{eurosym}
 \usepackage{tikz}
+\usepackage{geometry}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 
+\geometry{margin=2cm}
 \newcommand{\stdlohn}[0]{11 \euro}
+\setlength\parindent{0pt}
 
-\renewcommand*{\raggedsignature}{\raggedright}
+%\renewcommand{\raggedsignature}{\raggedright}
+ \renewcommand{\familydefault}{\sfdefault}
 
+ \pagenumbering{gobble}
 \begin{document}
 
-  \begin{letter}{
-  	\VAR{nimi} \\
-  	\VAR{iban} \\ \ \\
-  	\VAR{peruste} \\
-  }
+\large{FYYSIKKOKILTA~RY~--~Kulukorvauslomake} \\
+
+  	Nimi: \VAR{nimi} \\
+  	IBAN: \VAR{iban} \\
+    Pvm:  \VAR{pvm}  \\ \ \\
+  	Maksun peruste: \VAR{peruste} \\
 
   \begin{tikzpicture}[remember picture, overlay]
   \node[opacity=0.07,inner sep=0pt] at (current page.center)
-  {\includegraphics[width=0.8\paperwidth]{src/templates/fii_2.pdf}};
+  {\includegraphics[width=0.8\paperwidth]{DB/templates/fii_2.pdf}};
   \end{tikzpicture}
 
-  \opening{\ }
+  %\opening{\ }
 
-  \begin{longtable}{p{7.5cm}p{1.5cm}p{2.5cm}}
-  	\hline
+  \begin{longtable}{p{9.5cm}p{1.5cm}p{2.5cm}}
   	Kuvaus & Liite & Summa \\
   	\hline
     \hline
@@ -43,22 +47,19 @@
     \hline
 
     Yhteensä & & \VAR{yhteensa} \euro{} \\
-    \hline
 
   \end{longtable}
 
+  Hyväksytty raadin kokouksessa \VAR{kokous} \\
+  Maksettu päivämäärällä \VAR{maksupvm}
 
-  \end{letter}
+
+  %\end{letter}
 
   \newpage
 
   %% for i in range(tositteet|length)
-    \begin{minipage}{\textwidth}
-      \centering
-      \textbf{Liite \VAR{i+1}} \\
-      \includegraphics{\VAR{tositteet[i]['liite']}} \\
-      \hrulefill
-    \end{minipage}
+    \includepdf[pages=-]{\VAR{tositteet[i]['liite']}}
   %% endfor
 
 \end{document}

@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+{% block content %}
+
+{% if error %}
+
+<h1>{{error}}</h1>
+
+{% else %}
+
+<h1>Salasanan vaihto</h1>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="pw">Uusi salasana:</label><input id="pw" type="password" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="pw_re">Uudestaan:</label><input id="pw_re" type="password" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <button id="submit" class="btn btn-warning" disabled>
+            Vaihda!&nbsp;
+        </button>
+    </div>
+</form>
+
+<script>
+    $("document").ready(function() {
+        $("#pw, #pw_re").on('input', function() {
+            $("#submit").prop("disabled", $("#pw").val() != $("#pw_re").val() || $("#pw").val() == "")
+            console.log($("#submit").prop("disabled"))
+        })
+
+        $("#submit").click(function(){
+            $.ajax({
+                type: "post",
+                url: window.href,
+                data: JSON.stringify({
+                    password: $("#pw").val()
+                }),
+                contentType: "application/json",
+                complete: function(ret) {
+                    switch(ret.status) {
+                        case 200:
+                            alert("Salasana vaihdettu.")
+                            window.href = "/login"
+                            break
+                        case 400:
+                            alert("Salasanaa ei voida vaihtaa.")
+                            break
+                        default:
+                            alert("Jotain meni pieleen.\nYritä myöhemmin uudestaan.")
+                            break
+                    }
+                }
+            })
+            return false
+        })
+    })
+</script>
+{% endif %}
+
+{% endblock %}

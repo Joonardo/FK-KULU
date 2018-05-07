@@ -65,7 +65,7 @@ def latexify(bill):
         kokous=bill.accepted_at,
         pvm=bill.date.strftime('%d-%m-%Y'),
         maksupvm=bill.paid,
-        yhteensa=sum(float(tosite['summa']) for tosite in tositteet)
+        yhteensa=round(sum(float(tosite['summa']) for tosite in tositteet),2)
     )
 
     texf = id + '.tex'

@@ -49,6 +49,18 @@ function validateNotEmpty(elem) {
     }
 }
 
+function sum() {
+    elem.find("#summa").on('input', function() {
+        var sum = 0
+        $(this).val($(this).val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
+        $("[id^=summa]").each(function() {
+            var s = $(this)[0].value.replace(',', '.').replace('€', '')
+            sum += parseFloat(parseFloat(s) ? s : '0')
+        })
+        $("#total").text(sum.toFixed(2))
+    })
+}
+
 function AddTositeField() {
     var elem = $(erittelySkeleton)
     erittelyt.append(elem)
@@ -66,7 +78,7 @@ function AddTositeField() {
         if($(this).hasClass("is-invalid") && fn.length > 0) {
             elem.find("#liitePh").removeClass("fa-thumbs-o-up")
             elem.find("#liitePh").addClass("fa-thumbs-o-down")
-        }else if(fn.length > 0){ 
+        }else if(fn.length > 0){
             elem.find("#liitePh").removeClass("fa-thumbs-o-down")
             elem.find("#liitePh").addClass("fa-thumbs-o-up")
         }else{
@@ -74,18 +86,11 @@ function AddTositeField() {
         }
     })
 
-    elem.find("#summa").on('input', function() {
-        var sum = 0
-        $(this).val($(this).val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
-        $("[id^=summa]").each(function() {
-            var s = $(this)[0].value.replace(',', '.').replace('€', '')
-            sum += parseFloat(parseFloat(s) ? s : '0')
-        })
-        $("#total").text(sum.toFixed(2))
-    })
+    sum()
 
     elem.find("#poista").click(function() {
         elem.remove()
+        sum()
         checkValidations()
     })
 

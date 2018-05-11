@@ -14,7 +14,7 @@ Message:
 %(message)s
 '''
 
-SENDGRID_APIKEY = "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"
+SENDGRID_APIKEY = "BLAABLAA"
 
 RECEIPTS_FOLDER = '/tmp/'
 TMP_FOLDER = '/tmp/'

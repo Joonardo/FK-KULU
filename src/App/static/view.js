@@ -61,8 +61,6 @@ function show(bill) {
             },
             success: function(ret) {
                 alert(bill.hidden ? "Palautettu." : "Piilotettu.")
-                if(bill.hidden)
-                    $('#modal').hide()
             }
         })
     })

@@ -47,7 +47,7 @@ function show(bill) {
     $("#modal-date").text((new Date(bill.date)).toLocaleDateString())
     $("#modal-iban").text(escapeHtml(bill.iban))
     $("#modal-description").text(escapeHtml(bill.description))
-    $("#modal-accepted-at").text(escapeHtml(bill.accepted_at))
+    $("#modal-accepted-at").text(bill.accepted_at)
     $("#submit-toggle-hide").text(bill.hidden ? "Palauta." : "Piilota.")
 
     $("#submit-toggle-hide").off('click')
@@ -81,7 +81,7 @@ function show(bill) {
         $("#modal-accept-form").addClass('hidden')
         $("#modal-accepted").removeClass('hidden')
         $("#submit-accept").hide()
-        $("#modal-accepted-at").text(escapeHtml(bill.accepted_at))
+        $("#modal-accepted-at").text(bill.accepted_at)
     }else{
         $("#modal-accept-form").removeClass('hidden')
         $("#modal-accepted").addClass('hidden')

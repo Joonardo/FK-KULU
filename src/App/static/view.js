@@ -1,4 +1,5 @@
-bill_skeleton = `<tr title="{sum}€: {description}">
+bill_skeleton = `
+<tr title="{sum}€: {description}">
     <td>{submitter}</th>
     <td>{date}</th>
     <td id="accepted-{id}">{accepted_visual}</th>

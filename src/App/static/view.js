@@ -188,6 +188,9 @@ function search(ev, page=1) {
 function render_bill(bill) {
     bill.date = (new Date(bill.date)).toLocaleDateString()
     accepted_visual = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
+    if(bill.paid && bill.paid.length) {
+        accepted_visual += '&nbsp;<span class="fa fa-2x fa-money"></span>'
+    }
     bill.sum = 0
 
     for(i in bill.receipts) {
@@ -226,8 +229,8 @@ function render_bill(bill) {
                     alert("Hyväksyminen ei onnistunut.")
                 }
             })
-            $('#modal').toggle('modal')
-            show(bill)
+            $('#modal').modal('toggle')
+            reload()
         })
 
         $('#submit-pay').off('click')
@@ -243,15 +246,15 @@ function render_bill(bill) {
                     'Auth': localStorage.token
                 },
                 success: function() {
-                    $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+                    $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>&nbsp;<span class="fa fa-2x fa-money"></span>')
                     alert("Merkitty maksetuksi.")
                 },
                 error: function() {
                     alert("Maksetuksi merktseminen ei onnistunut.")
                 }
             })
-            $('#modal').toggle('modal')
-            show(bill)
+            $('#modal').modal('toggle')
+            reload()
         })
     })
 }
@@ -275,7 +278,14 @@ function render(resp) {
     }
 }
 
+var last_query = undefined
+
+function reload() {
+    download(last_query)
+}
+
 function download(query) {
+    last_query = query
     $('#table-body').empty()
     $('button').prop('disabled', true)
     $.ajax({

@@ -19,11 +19,12 @@ manager.create_api(User,
                    )
 
 manager.create_api(Bill,
-                   methods=['GET', 'POST'],
+                   methods=['GET', 'POST', 'PATCH'],
                    preprocessors={
                        'GET': [sec.auth],
                        'GET_MANY': [sec.auth],
-                       'POST': [Bill.preprocess_post]
+                       'POST': [Bill.preprocess_post],
+                       'PATCH': [sec.auth, Bill.preprocess_update]
                    }
                    # exclude_columns=['receipts']
                    )

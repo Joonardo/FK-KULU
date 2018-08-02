@@ -88,8 +88,16 @@ function show(bill) {
         $("#modal-accepted").addClass('hidden')
         $("#submit-accept").show()
     }
-    if(bill.paid != "") {
-        $("#pvm").attr("placeholder", escapeHtml(bill.paid))
+
+    if(bill.paid && bill.paid.length) {
+        $("#modal-paid").removeClass('hidden')
+        $("#modal-paid-form").addClass('hidden')
+        $("#submit-pay").hide()
+        $("#modal-paid-at").text(bill.paid)
+    }else{
+        $("#modal-paid").addClass('hidden')
+        $("#modal-paid-form").removeClass('hidden')
+        $("#submit-pay").show()
     }
 }
 
@@ -199,13 +207,12 @@ function render_bill(bill) {
         show(bill)
         $('#submit-accept').off('click')
         $('#submit-accept').on('click', function() {
-            console.log(bill.id);
             $.ajax({
-                type: 'post',
-                url: '/api/accept/' + bill.id,
+                type: 'patch',
+                url: '/api/bills/' + bill.id,
                 data: JSON.stringify({
-                    description: $('#info').val(),
-                    paidDesc: $('#pvm').val()
+                    accepted: true,
+                    accepted_at: $('#info').val()
                 }),
                 contentType: 'application/json',
                 headers: {
@@ -219,7 +226,32 @@ function render_bill(bill) {
                     alert("Hyväksyminen ei onnistunut.")
                 }
             })
-            $('#modal').modal('toggle')
+            $('#modal').toggle('modal')
+            show(bill)
+        })
+
+        $('#submit-pay').off('click')
+        $('#submit-pay').on('click', function() {
+            $.ajax({
+                type: 'patch',
+                url: '/api/bills/' + bill.id,
+                data: JSON.stringify({
+                    paid: $('#pvm').val()
+                }),
+                contentType: 'application/json',
+                headers: {
+                    'Auth': localStorage.token
+                },
+                success: function() {
+                    $('#accepted-' + bill.id).html('<span class="fa fa-2x fa-thumbs-o-up"></span>')
+                    alert("Merkitty maksetuksi.")
+                },
+                error: function() {
+                    alert("Maksetuksi merktseminen ei onnistunut.")
+                }
+            })
+            $('#modal').toggle('modal')
+            show(bill)
         })
     })
 }

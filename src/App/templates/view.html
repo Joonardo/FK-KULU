@@ -60,6 +60,14 @@
                     <label for="info"><strong>Hyväksytty&nbsp<strong></label>
                     <input id="info" class="form-control" type="text" placeholder="Kuvaus"/>
                 </div>
+                <div class="row" id="modal-paid">
+                    <div class="col-sm-3">
+                        <strong>Maksettu</strong>
+                    </div>
+                    <div id="modal-paid-at" class="col-sm-8 col-sm-offset-1">
+
+                    </div>
+                </div>
                 <div id="modal-paid-form" class="form form-inline">
                     <label for="pvm"><strong>Maksettu&nbsp<strong></label>
                     <input id="pvm" class="form-control" type="text" placeholder="Maksu pvm."/>
@@ -68,6 +76,7 @@
             </div>
             <div class="modal-footer">
                 <button id="submit-accept" class="btn btn-success">Hyväksy!</button>
+                <button id="submit-pay" class="btn btn-primary">Maksettu!</button>
                 <button id="submit-toggle-hide" class="btn"></button>
                 <button id="cancel-accept" class="btn btn-danger">Sulje.</button>
             </div>

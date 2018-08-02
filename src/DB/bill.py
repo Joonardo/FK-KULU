@@ -21,6 +21,13 @@ class Bill(db.Model):
     paid = db.Column(db.Unicode, nullable=True)
     hidden = db.Column(db.Boolean, default=False)
 
+    @staticmethod
+    def preprocess_update(**kw):
+        print(kw)
+        for key in kw:
+            if key not in ['id', 'paid', 'accepted', 'accepted_at']:
+                del kw[key]
+
     # Preprocessor for posting new bill
     @staticmethod
     def preprocess_post(**kw):

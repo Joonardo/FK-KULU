@@ -49,16 +49,14 @@ function validateNotEmpty(elem) {
     }
 }
 
-function sum() {
-    elem.find("#summa").on('input', function() {
-        var sum = 0
-        $(this).val($(this).val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
-        $("[id^=summa]").each(function() {
-            var s = $(this)[0].value.replace(',', '.').replace('€', '')
-            sum += parseFloat(parseFloat(s) ? s : '0')
-        })
-        $("#total").text(sum.toFixed(2))
+function sum(elem = undefined) {
+    let sum = 0
+    if(elem) elem.val(elem.val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
+    $("[id^=summa]").each(function() {
+        var s = $(this).val().replace(',', '.').replace('€', '')
+        sum += parseFloat(parseFloat(s) ? s : '0')
     })
+    $("#total").text(sum.toFixed(2))
 }
 
 function AddTositeField() {
@@ -86,7 +84,9 @@ function AddTositeField() {
         }
     })
 
-    sum()
+    elem.on('input', () => sum(elem))
+
+    sum(elem)
 
     elem.find("#poista").click(function() {
         elem.remove()

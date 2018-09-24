@@ -53,6 +53,7 @@ function sum(elem = undefined) {
     let sum = 0
     if(elem) elem.val(elem.val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
     $("[id^=summa]").each(function() {
+        $(this).val($(this).val().replace(/[^\d.,]/g, '').split(/[,\.]/g, 2).join('.'))
         var s = $(this).val().replace(',', '.').replace('€', '')
         sum += parseFloat(parseFloat(s) ? s : '0')
     })

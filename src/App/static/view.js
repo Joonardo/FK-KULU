@@ -45,7 +45,7 @@ receipt_skel = `
 function show(bill) {
     $("#modal-header").text("Kulukorvauslomake #" + bill.id)
     $("#modal-submitter").text(escapeHtml(bill.submitter))
-    $("#modal-date").text((new Date(bill.date)).toLocaleDateString())
+    $("#modal-date").text((new Date(bill.date)).toLocaleDateString('fi-FI'))
     $("#modal-iban").text(escapeHtml(bill.iban))
     $("#modal-description").text(escapeHtml(bill.description))
     $("#modal-accepted-at").text(bill.accepted_at)
@@ -186,7 +186,7 @@ function search(ev, page=1) {
 }
 
 function render_bill(bill) {
-    bill.date = (new Date(bill.date)).toLocaleDateString()
+    bill.date = (new Date(bill.date)).toLocaleDateString('fi-FI')
     accepted_visual = '<span class="fa fa-2x fa-' + (bill.accepted ? "thumbs-o-up" : "thumbs-o-down") + '"></span>'
     if(bill.paid && bill.paid.length) {
         accepted_visual += '&nbsp;<span class="fa fa-2x fa-money"></span>'
